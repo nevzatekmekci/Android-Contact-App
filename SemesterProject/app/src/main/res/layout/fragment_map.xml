@@ -2,14 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nevzat.semesterproject.MapFragment">
+    tools:context=".fragments.MapFragment">
 
 
 
-    <fragment
-        android:id="@+id/mapfragment"
-        android:layout_width=""
-        android:layout_height=""
-        class="com.google.android.gms.maps.SupportMapFragment" />
 
 </FrameLayout>

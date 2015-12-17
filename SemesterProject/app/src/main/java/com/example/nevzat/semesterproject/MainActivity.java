@@ -1,6 +1,7 @@
 package com.example.nevzat.semesterproject;
 
 
+import com.example.nevzat.semesterproject.R;
 import com.google.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
