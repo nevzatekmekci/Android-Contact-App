@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject;
+package com.example.nevzat.semesterproject.activities;
 
 
 import com.example.nevzat.semesterproject.R;
