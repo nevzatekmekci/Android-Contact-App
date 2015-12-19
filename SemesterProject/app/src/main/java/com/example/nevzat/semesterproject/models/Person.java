@@ -1,21 +1,25 @@
 package com.example.nevzat.semesterproject.models;
 
 
+import java.util.ArrayList;
+
 /**
  * Created by nevzat on 18/12/15.
  */
 public class Person {
+
+    private String pid;
     private String name;
     private String surname;
-    private Phone phone;
+    private ArrayList<Phone> phone;
     private String eMail;
-    private Location location;
+    private ArrayList<Location> location;
     private ActivityStatistic statistic;
 
     public Person() {
     }
 
-    public Person(String name, String surname, Phone phone, String eMail, Location location) {
+    public Person(String name, String surname, ArrayList<Phone> phone, String eMail, ArrayList<Location> location) {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
@@ -23,13 +27,20 @@ public class Person {
         this.location = location;
     }
 
-    public Person(String name, String surname, Phone phone, String eMail, Location location, ActivityStatistic statistic) {
+    public Person(String name, String surname, ArrayList<Phone> phone, String eMail, ArrayList<Location> location, ActivityStatistic statistic) {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.eMail = eMail;
         this.location = location;
         this.statistic = statistic;
+    }
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     public String getName() {
@@ -48,14 +59,6 @@ public class Person {
         this.surname = surname;
     }
 
-    public Phone getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Phone phone) {
-        this.phone = phone;
-    }
-
     public String geteMail() {
         return eMail;
     }
@@ -64,11 +67,19 @@ public class Person {
         this.eMail = eMail;
     }
 
-    public Location getLocation() {
+    public ArrayList<Phone> getPhone() {
+        return phone;
+    }
+
+    public void setPhone(ArrayList<Phone> phone) {
+        this.phone = phone;
+    }
+
+    public ArrayList<Location> getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(ArrayList<Location> location) {
         this.location = location;
     }
 

@@ -2,6 +2,7 @@ package com.example.nevzat.semesterproject.models;
 
 
 public class ActivityStatistic {
+    private int asid;
     private int missingCalls;
     private int sentMessages;
     private int receivedMessages;
@@ -22,6 +23,14 @@ public class ActivityStatistic {
         this.outgoingCallsNumber = outgoingCallsNumber;
         this.incomingCallsDuration = incomingCallsDuration;
         this.outgoingCallsDuration = outgoingCallsDuration;
+    }
+
+    public int getAsid() {
+        return asid;
+    }
+
+    public void setAsid(int asid) {
+        this.asid = asid;
     }
 
     public int getMissingCalls() {

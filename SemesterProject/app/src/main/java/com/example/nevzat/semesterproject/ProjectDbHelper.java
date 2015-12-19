@@ -21,34 +21,37 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ PersonTable.TABLE_NAME+"("
-                        +PersonTable.Cols.ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        +PersonTable.Cols.PID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
                         +PersonTable.Cols.NAME+" TEXT,"
                         +PersonTable.Cols.SURNAME+ " TEXT,"
                         +PersonTable.Cols.EMAIL+" TEXT"+")"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ LocationTable.TABLE_NAME+"("
-                        +LocationTable.Cols.ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +LocationTable.Cols.LATITUDE+" TEXT,"
-                        +LocationTable.Cols.LONGITUDE+ " TEXT,"
-                        +LocationTable.Cols.TYPE+" TEXT"+")"
+                        +LocationTable.Cols.LID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        +LocationTable.Cols.LATITUDE+" DOUBLE,"
+                        +LocationTable.Cols.LONGITUDE+ " DOUBLE,"
+                        +LocationTable.Cols.TYPE+" TEXT"
+                        +LocationTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ PhoneTable.TABLE_NAME+"("
-                        +PhoneTable.Cols.ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        +PhoneTable.Cols.PHID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
                         +PhoneTable.Cols.NUMBER+" TEXT,"
-                        +PhoneTable.Cols.TYPE+ " TEXT,"+")"
+                        +PhoneTable.Cols.TYPE+ " TEXT"
+                        +PhoneTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ ActivityStatisticTable.TABLE_NAME+"("
-                        +ActivityStatisticTable.Cols.ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        +ActivityStatisticTable.Cols.ASID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
                         +ActivityStatisticTable.Cols.MISSINGCALLS+" TEXT,"
                         +ActivityStatisticTable.Cols.SENTMESSAGES+ " TEXT,"
                         +ActivityStatisticTable.Cols.RECIEVEDMESSAGES+ " TEXT,"
                         +ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER+ " TEXT,"
                         +ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER+ " TEXT,"
                         +ActivityStatisticTable.Cols.INCOMINGCALLSDURATION+ " TEXT,"
-                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" TEXT"+")"
+                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" TEXT"
+                        +ActivityStatisticTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
         );
     }
 
