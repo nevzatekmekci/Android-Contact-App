@@ -6,19 +6,13 @@ import com.example.nevzat.semesterproject.ProjectDbHelper;
 import com.example.nevzat.semesterproject.R;
 import com.example.nevzat.semesterproject.adapters.SerialAdapter;
 import com.example.nevzat.semesterproject.models.Person;
-import com.google.*;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +42,7 @@ public class MainActivity extends FragmentActivity {
         //Clean all data
         personLab.deleteAllContacts();
 
-        personLab.addContact(new Person("123", "Nevzat", null, "Ekmekçi", null, null));
+        personLab.addContact(new Person("123", "Nevzat", null,"Ekmekçi", null, null));
         personLab.addContact(new Person("234", "Nevzat", null,"Ekmekçi",null, null));
         personLab.addContact(new Person("345", "Nevzat", null,"Ekmekçi",null, null));
         personLab.addContact(new Person("456", "Nevzat", null,"Ekmekçi",null, null));
@@ -77,14 +71,6 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
