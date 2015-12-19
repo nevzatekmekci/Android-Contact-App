@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.nevzat.semesterproject.models.ActivityStatistic;
 import com.example.nevzat.semesterproject.models.Location;
+import com.example.nevzat.semesterproject.models.LocationType;
 import com.example.nevzat.semesterproject.models.Person;
 import com.example.nevzat.semesterproject.models.Phone;
+import com.example.nevzat.semesterproject.models.PhoneType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +33,21 @@ public class PersonLab {
         ContentValues personValues = getContentPersonValues(person);
         ContentValues phoneValues = getContentPhoneValues(person);
         ContentValues locationValues = getContentLocationValues(person);
+        ContentValues statisticValues = getContentStatisticValues(person);
         database.update(ContactDBSchema.PersonTable.TABLE_NAME, personValues, ContactDBSchema.PersonTable.Cols.PID + "=?", new String[]{pid});
         database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues, ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{pid});
         database.update(ContactDBSchema.LocationTable.TABLE_NAME, locationValues, ContactDBSchema.LocationTable.Cols.PID + "=?", new String[]{pid});
+        database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME,statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
     }
     public void addContact(Person person){
         ContentValues personValues = getContentPersonValues(person);
         ContentValues phoneValues = getContentPhoneValues(person);
         ContentValues locationValues = getContentLocationValues(person);
+        ContentValues statisticValues = getContentStatisticValues(person);
         database.insert(ContactDBSchema.PersonTable.TABLE_NAME, null, personValues);
-        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, phoneValues);
+        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null,     phoneValues);
         database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, locationValues);
+        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, statisticValues);
     }
     private static ContentValues getContentPersonValues(Person person){
         ContentValues values = new ContentValues();
@@ -48,6 +55,17 @@ public class PersonLab {
         values.put(ContactDBSchema.PersonTable.Cols.NAME, person.getName().toString());
         values.put(ContactDBSchema.PersonTable.Cols.SURNAME, person.getSurname().toString());
         values.put(ContactDBSchema.PersonTable.Cols.EMAIL, person.geteMail().toString());
+        return values;
+    }
+    private static ContentValues getContentStatisticValues(Person person){
+        ContentValues values = new ContentValues();
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.MISSINGCALLS, person.getStatistic().getMissingCalls());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.RECIEVEDMESSAGES, person.getStatistic().getReceivedMessages());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.SENTMESSAGES, person.getStatistic().getSentMessages());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER, person.getStatistic().getIncomingCallsNumber());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER, person.getStatistic().getOutgoingCallsNumber());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSDURATION, person.getStatistic().getIncomingCallsDuration());
+        values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION, person.getStatistic().getOutgoingCallsDuration());
         return values;
     }
 
@@ -105,19 +123,95 @@ public class PersonLab {
         return contact;
 
     }
-    private ContactCursorWrapper queryCrimes(String whereClause,String [] whereArgs){
+
+    public Location getLocation(ContactCursorWrapper cursorWrapper){
+
+        Location location = new Location();
+        String lType = cursorWrapper.getString(2);
+        Double lat = cursorWrapper.getDouble(1);
+        Double lng = cursorWrapper.getDouble(2);
+        LocationType type=  LocationType.valueOf(lType);
+        location.setLat(lat);
+        location.setLng(lng);
+        location.setLocationType(type);
+        return location;
+    }
+
+    public ActivityStatistic getStatistic(ContactCursorWrapper cursorWrapper){
+
+        ActivityStatistic statistic = new ActivityStatistic();
+        statistic.setMissingCalls(cursorWrapper.getInt(1));
+        statistic.setSentMessages(cursorWrapper.getInt(2));
+        statistic.setReceivedMessages(cursorWrapper.getInt(3));
+        statistic.setIncomingCallsNumber(cursorWrapper.getInt(4));
+        statistic.setOutgoingCallsNumber(cursorWrapper.getInt(5));
+        statistic.setIncomingCallsDuration(cursorWrapper.getInt(6));
+        statistic.setOutgoingCallsDuration(cursorWrapper.getInt(7));
+        return statistic;
+    }
+
+    public Phone getPhone(ContactCursorWrapper cursorWrapper){
+
+        Phone phone = new Phone();
+        String pType = cursorWrapper.getString(2);
+        String number = cursorWrapper.getString(1);
+        PhoneType type=  PhoneType.valueOf(pType);
+        phone.setPhoneNumber(number);
+        phone.setPhoneType(type);
+        return phone;
+    }
+
+    private ContactCursorWrapper queryPersons(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.PersonTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
+        return new ContactCursorWrapper(cursor);
+    }
+    private ContactCursorWrapper queryPhones(String whereClause,String [] whereArgs){
+        Cursor cursor = database.query(ContactDBSchema.PhoneTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
+        return new ContactCursorWrapper(cursor);
+    }
+    private ContactCursorWrapper queryLocations(String whereClause,String [] whereArgs){
+        Cursor cursor = database.query(ContactDBSchema.LocationTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
+        return new ContactCursorWrapper(cursor);
+    }
+    private ContactCursorWrapper queryStatistics(String whereClause,String [] whereArgs){
+        Cursor cursor = database.query(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
     }
 
     public List<Person> getContacts(){
-        List<Person> contacts = new ArrayList<Person>();
-        ContactCursorWrapper ccw = queryCrimes(null, null);
+        ArrayList<Person> contacts = new ArrayList<Person>();
+        ArrayList<Location> locations = new ArrayList<Location>();
+        ArrayList<Phone> phones = new ArrayList<Phone>();
+        ContactCursorWrapper ccw = queryPersons(null, null);
+        Person person;
+        ActivityStatistic statistic;
 
         try{
             ccw.moveToFirst();
             while(!ccw.isAfterLast()){
-                contacts.add(getPerson(ccw));
+                locations.clear();
+                phones.clear();
+                ContactCursorWrapper ccw2 = queryPhones(null, null);
+                ccw2.moveToFirst();
+                while (!ccw2.isAfterLast()){
+                    phones.add(getPhone(ccw2));
+                    ccw2.moveToNext();
+                }
+                ccw2 = queryLocations(null, null);
+                ccw2.moveToFirst();
+                while (!ccw2.isAfterLast()){
+                    locations.add(getLocation(ccw2));
+                    ccw2.moveToNext();
+                }
+                ccw2 = queryStatistics(null,null);
+                ccw2.moveToFirst();
+                statistic = getStatistic(ccw2);
+
+                person = getPerson(ccw);
+                person.setLocation(locations);
+                person.setPhone(phones);
+                person.setStatistic(statistic);
+                contacts.add(person);
                 ccw.moveToNext();
             }
         }

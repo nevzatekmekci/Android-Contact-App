@@ -44,13 +44,13 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ ActivityStatisticTable.TABLE_NAME+"("
                         +ActivityStatisticTable.Cols.ASID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +ActivityStatisticTable.Cols.MISSINGCALLS+" TEXT,"
-                        +ActivityStatisticTable.Cols.SENTMESSAGES+ " TEXT,"
-                        +ActivityStatisticTable.Cols.RECIEVEDMESSAGES+ " TEXT,"
-                        +ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER+ " TEXT,"
-                        +ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER+ " TEXT,"
-                        +ActivityStatisticTable.Cols.INCOMINGCALLSDURATION+ " TEXT,"
-                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" TEXT"
+                        +ActivityStatisticTable.Cols.MISSINGCALLS+" INTEGER,"
+                        +ActivityStatisticTable.Cols.SENTMESSAGES+ " INTEGER,"
+                        +ActivityStatisticTable.Cols.RECIEVEDMESSAGES+ " INTEGER,"
+                        +ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER+ " INTEGER,"
+                        +ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER+ " INTEGER,"
+                        +ActivityStatisticTable.Cols.INCOMINGCALLSDURATION+ " TIME,"
+                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" TIME"
                         +ActivityStatisticTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
         );
     }
