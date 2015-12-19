@@ -1,13 +1,18 @@
 package com.example.nevzat.semesterproject.activities;
 
 
+import com.example.nevzat.semesterproject.PersonLab;
+import com.example.nevzat.semesterproject.ProjectDbHelper;
 import com.example.nevzat.semesterproject.R;
+import com.example.nevzat.semesterproject.adapters.SerialAdapter;
+import com.example.nevzat.semesterproject.models.Person;
 import com.google.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,11 +22,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
     public GoogleMap googleM;
+    public ProjectDbHelper dbHelper;
+    public PersonLab personLab;
+    public SerialAdapter dataAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +42,40 @@ public class MainActivity extends FragmentActivity {
 
         TextView text = (TextView) findViewById(R.id.text);
 
-        if (googleM==null) {
-            googleM = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapfragment)).getMap();
-            if (googleM!=null){
-                LatLng mCoordinate = new LatLng(43.02,28.72);
-                googleM.moveCamera(CameraUpdateFactory.newLatLngZoom(mCoordinate, 13));
+        dbHelper = new ProjectDbHelper(this);
+        personLab = new PersonLab(getApplicationContext());
+
+        //Clean all data
+        personLab.deleteAllContacts();
+
+        personLab.addContact(new Person("123", "Nevzat", null, "Ekmekçi", null, null));
+        personLab.addContact(new Person("234", "Nevzat", null,"Ekmekçi",null, null));
+        personLab.addContact(new Person("345", "Nevzat", null,"Ekmekçi",null, null));
+        personLab.addContact(new Person("456", "Nevzat", null,"Ekmekçi",null, null));
+        personLab.addContact(new Person("567", "Nevzat", null,"Ekmekçi",null, null));
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+        List<Person> personList = personLab.getContacts();
+        dataAdapter = new SerialAdapter(MainActivity.this,personList);
+        listView.setAdapter(dataAdapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view,
+                                    int position, long id) {
+                // Get the cursor, positioned to the corresponding row in the result set
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+                // Get the state's capital from this row in the database.
+                String name =
+                        cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                Toast.makeText(getApplicationContext(),
+                        name, Toast.LENGTH_SHORT).show();
+
             }
-        }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
