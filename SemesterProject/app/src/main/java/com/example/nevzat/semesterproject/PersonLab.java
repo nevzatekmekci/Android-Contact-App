@@ -37,7 +37,7 @@ public class PersonLab {
         database.update(ContactDBSchema.PersonTable.TABLE_NAME, personValues, ContactDBSchema.PersonTable.Cols.PID + "=?", new String[]{pid});
         database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues, ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{pid});
         database.update(ContactDBSchema.LocationTable.TABLE_NAME, locationValues, ContactDBSchema.LocationTable.Cols.PID + "=?", new String[]{pid});
-        database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME,statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
+        database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
     }
     public void addContact(Person person){
         ContentValues personValues = getContentPersonValues(person);
@@ -49,43 +49,57 @@ public class PersonLab {
         database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, locationValues);
         database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, statisticValues);
     }
-    private static ContentValues getContentPersonValues(Person person){
+    public static ContentValues getContentPersonValues(Person person){
         ContentValues values = new ContentValues();
-        values.put(ContactDBSchema.PersonTable.Cols.PID, person.getPid().toString());
-        values.put(ContactDBSchema.PersonTable.Cols.NAME, person.getName().toString());
-        values.put(ContactDBSchema.PersonTable.Cols.SURNAME, person.getSurname().toString());
-        values.put(ContactDBSchema.PersonTable.Cols.EMAIL, person.geteMail().toString());
-        return values;
+        if (person!=null){
+            values.put(ContactDBSchema.PersonTable.Cols.NAME, person.getName().toString());
+            values.put(ContactDBSchema.PersonTable.Cols.SURNAME, person.getSurname().toString());
+            values.put(ContactDBSchema.PersonTable.Cols.EMAIL, person.geteMail().toString());
+            return values;
+        }
+        return null;
+
     }
-    private static ContentValues getContentStatisticValues(Person person){
+    public static ContentValues getContentStatisticValues(Person person){
         ContentValues values = new ContentValues();
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.MISSINGCALLS, person.getStatistic().getMissingCalls());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.RECIEVEDMESSAGES, person.getStatistic().getReceivedMessages());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.SENTMESSAGES, person.getStatistic().getSentMessages());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER, person.getStatistic().getIncomingCallsNumber());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER, person.getStatistic().getOutgoingCallsNumber());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSDURATION, person.getStatistic().getIncomingCallsDuration());
-        values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION, person.getStatistic().getOutgoingCallsDuration());
-        return values;
+        if(person.getStatistic()!=null){
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.MISSINGCALLS, person.getStatistic().getMissingCalls());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.RECIEVEDMESSAGES, person.getStatistic().getReceivedMessages());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.SENTMESSAGES, person.getStatistic().getSentMessages());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER, person.getStatistic().getIncomingCallsNumber());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER, person.getStatistic().getOutgoingCallsNumber());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.INCOMINGCALLSDURATION, person.getStatistic().getIncomingCallsDuration());
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION, person.getStatistic().getOutgoingCallsDuration());
+            return values;
+        }
+        return null;
+
     }
 
     public static ContentValues getContentPhoneValues(Person person) {
         ContentValues values = new ContentValues();
-        for (int i = 0; i < person.getPhone().size(); i++) {
-            values.put(ContactDBSchema.PhoneTable.Cols.NUMBER, person.getPhone().get(i).getPhoneNumber().toString());
-            values.put(ContactDBSchema.PhoneTable.Cols.TYPE, person.getPhone().get(i).getPhoneType().toString());
+        if (person.getPhone()!=null){
+            for (int i = 0; i < person.getPhone().size(); i++) {
+                values.put(ContactDBSchema.PhoneTable.Cols.NUMBER, person.getPhone().get(i).getPhoneNumber().toString());
+                values.put(ContactDBSchema.PhoneTable.Cols.TYPE, person.getPhone().get(i).getPhoneType().toString());
+            }
+            return values;
         }
-        return values;
+        return null;
     }
 
     public static ContentValues getContentLocationValues(Person person){
         ContentValues values = new ContentValues();
-        for (int i=0;i< person.getLocation().size();i++){
-            values.put(ContactDBSchema.LocationTable.Cols.TYPE, person.getLocation().get(i).getLocationType().toString());
-            values.put(ContactDBSchema.LocationTable.Cols.LATITUDE, person.getLocation().get(i).getLat());
-            values.put(ContactDBSchema.LocationTable.Cols.LONGITUDE, person.getLocation().get(i).getLng());
+        if (person.getLocation()!=null){
+            for (int i=0;i< person.getLocation().size();i++){
+                values.put(ContactDBSchema.LocationTable.Cols.TYPE, person.getLocation().get(i).getLocationType().toString());
+                values.put(ContactDBSchema.LocationTable.Cols.LATITUDE, person.getLocation().get(i).getLat());
+                values.put(ContactDBSchema.LocationTable.Cols.LONGITUDE, person.getLocation().get(i).getLng());
+            }
+            return values;
         }
-        return values;
+        return null;
+
     }
 
     public void deletePerson(String id){
@@ -128,8 +142,8 @@ public class PersonLab {
 
         Location location = new Location();
         String lType = cursorWrapper.getString(2);
-        Double lat = cursorWrapper.getDouble(1);
-        Double lng = cursorWrapper.getDouble(2);
+        double lat = cursorWrapper.getDouble(1);
+        double lng = cursorWrapper.getDouble(2);
         LocationType type=  LocationType.valueOf(lType);
         location.setLat(lat);
         location.setLng(lng);
@@ -140,14 +154,28 @@ public class PersonLab {
     public ActivityStatistic getStatistic(ContactCursorWrapper cursorWrapper){
 
         ActivityStatistic statistic = new ActivityStatistic();
-        statistic.setMissingCalls(cursorWrapper.getInt(1));
-        statistic.setSentMessages(cursorWrapper.getInt(2));
-        statistic.setReceivedMessages(cursorWrapper.getInt(3));
-        statistic.setIncomingCallsNumber(cursorWrapper.getInt(4));
-        statistic.setOutgoingCallsNumber(cursorWrapper.getInt(5));
-        statistic.setIncomingCallsDuration(cursorWrapper.getInt(6));
-        statistic.setOutgoingCallsDuration(cursorWrapper.getInt(7));
-        return statistic;
+        if (cursorWrapper.getCount()!=0){
+            int missingCalls = cursorWrapper.getInt(1);
+            int sentMessages = cursorWrapper.getInt(2);
+            int receivedMessages = cursorWrapper.getInt(3);
+            int incomingCallsNumber = cursorWrapper.getInt(4);
+            int outgoingCallsNumber = cursorWrapper.getInt(5);
+            int incomingCallsDuration=cursorWrapper.getInt(6);
+            int outgoingCallsDuration=cursorWrapper.getInt(7);
+
+
+
+            statistic.setMissingCalls(missingCalls);
+            statistic.setSentMessages(sentMessages);
+            statistic.setReceivedMessages(receivedMessages);
+            statistic.setIncomingCallsNumber(incomingCallsNumber);
+            statistic.setOutgoingCallsNumber(outgoingCallsNumber);
+            statistic.setIncomingCallsDuration(incomingCallsDuration);
+            statistic.setOutgoingCallsDuration(outgoingCallsDuration);
+            return statistic;
+        }
+        return null;
+
     }
 
     public Phone getPhone(ContactCursorWrapper cursorWrapper){
@@ -161,19 +189,19 @@ public class PersonLab {
         return phone;
     }
 
-    private ContactCursorWrapper queryPersons(String whereClause,String [] whereArgs){
+    public ContactCursorWrapper queryPersons(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.PersonTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
     }
-    private ContactCursorWrapper queryPhones(String whereClause,String [] whereArgs){
+    public ContactCursorWrapper queryPhones(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.PhoneTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
     }
-    private ContactCursorWrapper queryLocations(String whereClause,String [] whereArgs){
+    public ContactCursorWrapper queryLocations(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.LocationTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
     }
-    private ContactCursorWrapper queryStatistics(String whereClause,String [] whereArgs){
+    public ContactCursorWrapper queryStatistics(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
     }
@@ -192,20 +220,38 @@ public class PersonLab {
                 locations.clear();
                 phones.clear();
                 ContactCursorWrapper ccw2 = queryPhones(null, null);
-                ccw2.moveToFirst();
-                while (!ccw2.isAfterLast()){
-                    phones.add(getPhone(ccw2));
-                    ccw2.moveToNext();
+                try{
+                    ccw2.moveToFirst();
+                    while (!ccw2.isAfterLast()){
+                        phones.add(getPhone(ccw2));
+                        ccw2.moveToNext();
+                    }
                 }
+                finally {
+                    ccw2.close();
+                }
+
                 ccw2 = queryLocations(null, null);
-                ccw2.moveToFirst();
-                while (!ccw2.isAfterLast()){
-                    locations.add(getLocation(ccw2));
-                    ccw2.moveToNext();
+                try{
+                    ccw2.moveToFirst();
+                    while (!ccw2.isAfterLast()){
+                        locations.add(getLocation(ccw2));
+                        ccw2.moveToNext();
+                    }
                 }
-                ccw2 = queryStatistics(null,null);
-                ccw2.moveToFirst();
-                statistic = getStatistic(ccw2);
+                finally {
+                    ccw2.close();
+                }
+
+                ccw2 = queryStatistics(null, null);
+                try{
+                    ccw2.moveToFirst();
+                    statistic = getStatistic(ccw2);
+                }
+                finally {
+                    ccw2.close();
+                }
+
 
                 person = getPerson(ccw);
                 person.setLocation(locations);

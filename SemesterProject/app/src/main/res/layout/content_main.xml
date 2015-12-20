@@ -22,11 +22,5 @@
         android:layout_width="wrap_content"
         android:layout_height="381dp" />
 
-    <fragment
-        android:id="@+id/mapfragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment" />
-
 
 </RelativeLayout>

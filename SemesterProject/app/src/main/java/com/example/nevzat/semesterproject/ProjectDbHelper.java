@@ -21,37 +21,40 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ PersonTable.TABLE_NAME+"("
-                        +PersonTable.Cols.PID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +PersonTable.Cols.NAME+" TEXT,"
-                        +PersonTable.Cols.SURNAME+ " TEXT,"
+                        +PersonTable.Cols.PID+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        +PersonTable.Cols.NAME+" TEXT NOT NULL,"
+                        +PersonTable.Cols.SURNAME+ " TEXT NOT NULL,"
                         +PersonTable.Cols.EMAIL+" TEXT"+")"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ LocationTable.TABLE_NAME+"("
-                        +LocationTable.Cols.LID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +LocationTable.Cols.LATITUDE+" DOUBLE,"
-                        +LocationTable.Cols.LONGITUDE+ " DOUBLE,"
-                        +LocationTable.Cols.TYPE+" TEXT"
-                        +LocationTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
+                        +LocationTable.Cols.LID+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        +LocationTable.Cols.LATITUDE+" DOUBLE NOT NULL,"
+                        +LocationTable.Cols.LONGITUDE+ " DOUBLE NOT NULL,"
+                        +LocationTable.Cols.TYPE+" TEXT NOT NULL,"
+                        +LocationTable.Cols.PID+ " INTEGER NOT NULL,"
+                        +"FOREIGN KEY(PID) REFERENCES PersonTable(PID) ON DELETE CASCADE)"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ PhoneTable.TABLE_NAME+"("
-                        +PhoneTable.Cols.PHID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +PhoneTable.Cols.NUMBER+" TEXT,"
-                        +PhoneTable.Cols.TYPE+ " TEXT"
-                        +PhoneTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
+                        +PhoneTable.Cols.PHID+" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        +PhoneTable.Cols.NUMBER+" TEXT NOT NULL,"
+                        +PhoneTable.Cols.TYPE+ " TEXT NOT NULL,"
+                        +PhoneTable.Cols.PID+ " INTEGER NOT NULL,"
+                        +"FOREIGN KEY(PID) REFERENCES PersonTable(PID) ON DELETE CASCADE)"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ ActivityStatisticTable.TABLE_NAME+"("
-                        +ActivityStatisticTable.Cols.ASID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        +ActivityStatisticTable.Cols.MISSINGCALLS+" INTEGER,"
-                        +ActivityStatisticTable.Cols.SENTMESSAGES+ " INTEGER,"
-                        +ActivityStatisticTable.Cols.RECIEVEDMESSAGES+ " INTEGER,"
-                        +ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER+ " INTEGER,"
-                        +ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER+ " INTEGER,"
-                        +ActivityStatisticTable.Cols.INCOMINGCALLSDURATION+ " TIME,"
-                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" TIME"
-                        +ActivityStatisticTable.Cols.PID+ " INTEGER FOREIGN KEY"+")"
+                        +ActivityStatisticTable.Cols.ASID+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        +ActivityStatisticTable.Cols.MISSINGCALLS+" INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.SENTMESSAGES+ " INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.RECIEVEDMESSAGES+ " INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.INCOMINGCALLSNUMBER+ " INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.OUTGOINGCALLSNUMBER+ " INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.INCOMINGCALLSDURATION+ " INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.OUTGOINGCALLSDURATION+" INTEGER DEFAULT 0,"
+                        +ActivityStatisticTable.Cols.PID+ " INTEGER NOT NULL,"
+                        +"FOREIGN KEY(PID) REFERENCES PersonTable(PID) ON DELETE CASCADE)"
         );
     }
 

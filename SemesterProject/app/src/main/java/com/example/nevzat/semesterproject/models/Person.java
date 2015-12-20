@@ -25,6 +25,7 @@ public class Person {
         this.phone = phone;
         this.eMail = eMail;
         this.location = location;
+        this.statistic = null;
     }
 
     public Person(String name, String surname, ArrayList<Phone> phone, String eMail, ArrayList<Location> location, ActivityStatistic statistic) {

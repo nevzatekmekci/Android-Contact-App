@@ -7,15 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.nevzat.semesterproject.R;
 import com.example.nevzat.semesterproject.models.Person;
-
 import java.util.List;
 
-/**
- * Created by nevzat on 19/12/15.
- */
 public class SerialAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private List<Person> personList;

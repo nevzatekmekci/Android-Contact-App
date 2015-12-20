@@ -5,14 +5,18 @@ import com.example.nevzat.semesterproject.PersonLab;
 import com.example.nevzat.semesterproject.ProjectDbHelper;
 import com.example.nevzat.semesterproject.R;
 import com.example.nevzat.semesterproject.adapters.SerialAdapter;
+import com.example.nevzat.semesterproject.models.ActivityStatistic;
+import com.example.nevzat.semesterproject.models.Location;
+import com.example.nevzat.semesterproject.models.LocationType;
 import com.example.nevzat.semesterproject.models.Person;
-import com.google.android.gms.maps.GoogleMap;
+import com.example.nevzat.semesterproject.models.Phone;
+import com.example.nevzat.semesterproject.models.PhoneType;
 
 import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +25,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
-    public GoogleMap googleM;
     public ProjectDbHelper dbHelper;
     public PersonLab personLab;
     public SerialAdapter dataAdapter;
+    Location location;
+    Person person;
+    Phone phone;
+    ActivityStatistic statistic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +48,19 @@ public class MainActivity extends FragmentActivity {
         personLab = new PersonLab(getApplicationContext());
 
         //Clean all data
-        personLab.deleteAllContacts();
-
-        personLab.addContact(new Person("123", "Nevzat", null,"Ekmekçi", null, null));
-        personLab.addContact(new Person("234", "Nevzat", null,"Ekmekçi",null, null));
-        personLab.addContact(new Person("345", "Nevzat", null,"Ekmekçi",null, null));
-        personLab.addContact(new Person("456", "Nevzat", null,"Ekmekçi",null, null));
-        personLab.addContact(new Person("567", "Nevzat", null,"Ekmekçi",null, null));
+        //personLab.deleteAllContacts();
+        phone = new Phone("12344", PhoneType.HOME);
+        ArrayList<Phone> phones = new ArrayList<>();
+        phones.add(phone);
+        ArrayList<Location> locations = new ArrayList<>();
+        location = new Location(22.2,22.3, LocationType.WORK);
+        locations.add(new Location(22.2,22.2,LocationType.HOME));
+        locations.add(location);
+        personLab.addContact(new Person("Nevzat", "Ekmekçi", phones,"Ekmekçi", locations));
+        personLab.addContact(new Person("234", "Nevzat", phones,"Ekmekçi",locations));
+        personLab.addContact(new Person("345", "Nevzat", phones,"Ekmekçi",locations));
+        personLab.addContact(new Person("456", "Nevzat", phones,"Ekmekçi",locations));
+        personLab.addContact(new Person("567", "Nevzat", phones,"Ekmekçi",locations));
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
@@ -60,11 +74,56 @@ public class MainActivity extends FragmentActivity {
             public void onItemClick(AdapterView<?> listView, View view,
                                     int position, long id) {
                 // Get the cursor, positioned to the corresponding row in the result set
-                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+                person = (Person) listView.getItemAtPosition(position);
+                String whereClause = "pid = ?";
+                String[] whereArgs = new String[] {
+                        person.getPid()
+                };
+                PersonLab.ContactCursorWrapper ccw=  personLab.queryPersons(whereClause, whereArgs);
+                ccw.moveToFirst();
+
+/*
+                try{
+                    ccw.moveToFirst();
+                    while (!ccw.isAfterLast()){
+                        phone.set(personLab.getPhone(ccw));
+                        ccw2.moveToNext();
+                    }
+                }
+                finally {
+                    ccw2.close();
+                }
+
+                ccw2 = queryLocations(null, null);
+                try{
+                    ccw2.moveToFirst();
+                    while (!ccw2.isAfterLast()){
+                        locations.add(getLocation(ccw2));
+                        ccw2.moveToNext();
+                    }
+                }
+                finally {
+                    ccw2.close();
+                }
+
+                ccw2 = queryStatistics(null, null);
+                try{
+                    ccw2.moveToFirst();
+                    statistic = getStatistic(ccw2);
+                }
+                finally {
+                    ccw2.close();
+                }
+
+                */
+
+
+                Person person1 = personLab.getPerson(ccw) ;
+                person1.setStatistic(personLab.getStatistic(personLab.queryStatistics(whereClause, whereArgs)));
+
 
                 // Get the state's capital from this row in the database.
-                String name =
-                        cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                String name = person.getName();
                 Toast.makeText(getApplicationContext(),
                         name, Toast.LENGTH_SHORT).show();
 
