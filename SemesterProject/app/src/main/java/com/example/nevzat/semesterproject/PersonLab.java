@@ -40,15 +40,36 @@ public class PersonLab {
         database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
     }
     public void addContact(Person person){
-        ContentValues personValues = getContentPersonValues(person);
-        ContentValues phoneValues = getContentPhoneValues(person);
-        ContentValues locationValues = getContentLocationValues(person);
-        ContentValues statisticValues = getContentStatisticValues(person);
-        database.insert(ContactDBSchema.PersonTable.TABLE_NAME, null, personValues);
-        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null,     phoneValues);
-        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, locationValues);
-        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null, statisticValues);
+        addPerson(person);
+        addPhone(person);
+        addLocation(person);
+        addStatistic(person);
     }
+    public void addStatistic(Person person){
+        ContentValues statisticValues = getContentStatisticValues(person);
+        database.insert(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, null, statisticValues);
+    }
+    public void addPhone(Person person){
+        ContentValues phoneValues = getContentPhoneValues(person);
+        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null,phoneValues);
+    }
+    public void addLocation(Person person){
+        ContentValues locationValues = getContentLocationValues(person);
+        database.insert(ContactDBSchema.LocationTable.TABLE_NAME, null, locationValues);
+    }
+    public void addPerson(Person person){
+        ContentValues personValues = getContentPersonValues(person);
+        database.insert(ContactDBSchema.PersonTable.TABLE_NAME, null, personValues);
+        String whereClause = "name = ? and surname = ?";
+        String[] whereArgs = new String[] {
+                person.getName(),
+                person.getSurname()
+        };
+        ContactCursorWrapper ccw=  queryPersons(whereClause, whereArgs);
+        ccw.moveToFirst();
+        person.setPid(getPerson(ccw).getPid());
+    }
+
     public static ContentValues getContentPersonValues(Person person){
         ContentValues values = new ContentValues();
         if (person!=null){
@@ -63,6 +84,7 @@ public class PersonLab {
     public static ContentValues getContentStatisticValues(Person person){
         ContentValues values = new ContentValues();
         if(person.getStatistic()!=null){
+            values.put(ContactDBSchema.ActivityStatisticTable.Cols.PID, person.getPid());
             values.put(ContactDBSchema.ActivityStatisticTable.Cols.MISSINGCALLS, person.getStatistic().getMissingCalls());
             values.put(ContactDBSchema.ActivityStatisticTable.Cols.RECIEVEDMESSAGES, person.getStatistic().getReceivedMessages());
             values.put(ContactDBSchema.ActivityStatisticTable.Cols.SENTMESSAGES, person.getStatistic().getSentMessages());
@@ -82,6 +104,7 @@ public class PersonLab {
             for (int i = 0; i < person.getPhone().size(); i++) {
                 values.put(ContactDBSchema.PhoneTable.Cols.NUMBER, person.getPhone().get(i).getPhoneNumber().toString());
                 values.put(ContactDBSchema.PhoneTable.Cols.TYPE, person.getPhone().get(i).getPhoneType().toString());
+                values.put(ContactDBSchema.PhoneTable.Cols.PID, person.getPid());
             }
             return values;
         }
@@ -93,6 +116,7 @@ public class PersonLab {
         if (person.getLocation()!=null){
             for (int i=0;i< person.getLocation().size();i++){
                 values.put(ContactDBSchema.LocationTable.Cols.TYPE, person.getLocation().get(i).getLocationType().toString());
+                values.put(ContactDBSchema.LocationTable.Cols.PID, person.getPid());
                 values.put(ContactDBSchema.LocationTable.Cols.LATITUDE, person.getLocation().get(i).getLat());
                 values.put(ContactDBSchema.LocationTable.Cols.LONGITUDE, person.getLocation().get(i).getLng());
             }
@@ -118,30 +142,32 @@ public class PersonLab {
             super(cursor);
         }
     }
+
     public Person getPerson(ContactCursorWrapper cursorWrapper){
+
         String uuid = cursorWrapper.getString(0);
         String name = cursorWrapper.getString(1);
         String surname = cursorWrapper.getString(2);
         String email = cursorWrapper.getString(3);
         /*
-        String uuid = getString(getColumnIndex(ContactDBSchema.ContactTable.Cols.UUID));
-        String name = getString(getColumnIndex(ContactDBSchema.ContactTable.Cols.USERNAME));
-        String surname = getString(getColumnIndex(ContactDBSchema.ContactTable.Cols.SURNAME));
-        String phone = getString(getColumnIndex(ContactDBSchema.ContactTable.Cols.PHONE));
+            String uuid = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.PID));
+            String name = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.NAME));
+            String surname = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.SURNAME));
+            String email = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.EMAIL));
 */
-        Person contact = new Person();
-        contact.setPid(uuid);
-        contact.setName(name);
-        contact.setSurname(surname);
-        contact.seteMail(email);
-        return contact;
+        Person person = new Person();
+        person.setPid(uuid);
+        person.setName(name);
+        person.setSurname(surname);
+        person.seteMail(email);
+        return person;
 
     }
 
     public Location getLocation(ContactCursorWrapper cursorWrapper){
 
         Location location = new Location();
-        String lType = cursorWrapper.getString(2);
+        String lType = cursorWrapper.getString(3);
         double lat = cursorWrapper.getDouble(1);
         double lng = cursorWrapper.getDouble(2);
         LocationType type=  LocationType.valueOf(lType);
@@ -189,6 +215,57 @@ public class PersonLab {
         return phone;
     }
 
+    public Person getContact(ContactCursorWrapper cursorWrapper){
+        Person person;
+        ContactCursorWrapper ccw;
+        ArrayList<Location> locations = new ArrayList<>();
+        ArrayList<Phone> phones = new ArrayList<>();
+
+        person =  getPerson(cursorWrapper);
+        String whereClause = "pid = ?";
+        String[] whereArgs = new String[] {
+                person.getPid()
+        };
+
+        ccw = queryPhones(whereClause, whereArgs);
+
+        try{
+            ccw.moveToFirst();
+            while (!ccw.isAfterLast()){
+                phones.add(getPhone(ccw));
+                ccw.moveToNext();
+            }
+        }
+        finally {
+            ccw.close();
+        }
+
+        ccw = queryLocations(whereClause, whereArgs);
+        try{
+            ccw.moveToFirst();
+            while (!ccw.isAfterLast()){
+               locations.add(getLocation(ccw));
+                ccw.moveToNext();
+            }
+        }
+        finally {
+            ccw.close();
+        }
+
+        ccw = queryStatistics(whereClause, whereArgs);
+        try{
+            ccw.moveToFirst();
+            person.setStatistic(getStatistic(ccw));
+        }
+        finally {
+            ccw.close();
+        }
+        person.setLocation(locations);
+        person.setPhone(phones);
+        return person;
+
+    }
+
     public ContactCursorWrapper queryPersons(String whereClause,String [] whereArgs){
         Cursor cursor = database.query(ContactDBSchema.PersonTable.TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         return new ContactCursorWrapper(cursor);
@@ -208,56 +285,12 @@ public class PersonLab {
 
     public List<Person> getContacts(){
         ArrayList<Person> contacts = new ArrayList<Person>();
-        ArrayList<Location> locations = new ArrayList<Location>();
-        ArrayList<Phone> phones = new ArrayList<Phone>();
         ContactCursorWrapper ccw = queryPersons(null, null);
-        Person person;
-        ActivityStatistic statistic;
 
         try{
             ccw.moveToFirst();
             while(!ccw.isAfterLast()){
-                locations.clear();
-                phones.clear();
-                ContactCursorWrapper ccw2 = queryPhones(null, null);
-                try{
-                    ccw2.moveToFirst();
-                    while (!ccw2.isAfterLast()){
-                        phones.add(getPhone(ccw2));
-                        ccw2.moveToNext();
-                    }
-                }
-                finally {
-                    ccw2.close();
-                }
-
-                ccw2 = queryLocations(null, null);
-                try{
-                    ccw2.moveToFirst();
-                    while (!ccw2.isAfterLast()){
-                        locations.add(getLocation(ccw2));
-                        ccw2.moveToNext();
-                    }
-                }
-                finally {
-                    ccw2.close();
-                }
-
-                ccw2 = queryStatistics(null, null);
-                try{
-                    ccw2.moveToFirst();
-                    statistic = getStatistic(ccw2);
-                }
-                finally {
-                    ccw2.close();
-                }
-
-
-                person = getPerson(ccw);
-                person.setLocation(locations);
-                person.setPhone(phones);
-                person.setStatistic(statistic);
-                contacts.add(person);
+                contacts.add(getContact(ccw));
                 ccw.moveToNext();
             }
         }

@@ -12,6 +12,8 @@ import com.example.nevzat.semesterproject.models.Person;
 import com.example.nevzat.semesterproject.models.Phone;
 import com.example.nevzat.semesterproject.models.PhoneType;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.os.Bundle;
@@ -33,8 +35,12 @@ public class MainActivity extends AppCompatActivity {
     public ProjectDbHelper dbHelper;
     public PersonLab personLab;
     public SerialAdapter dataAdapter;
+    PersonLab.ContactCursorWrapper ccw,ccw2;
+
     Location location;
-    Person person;
+    Person person,person1;
+    ArrayList<Location> locations;
+    ArrayList<Phone> phones;
     Phone phone;
     ActivityStatistic statistic;
     @Override
@@ -42,25 +48,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView text = (TextView) findViewById(R.id.text);
-
         dbHelper = new ProjectDbHelper(this);
         personLab = new PersonLab(getApplicationContext());
 
         //Clean all data
-        //personLab.deleteAllContacts();
-        phone = new Phone("12344", PhoneType.HOME);
-        ArrayList<Phone> phones = new ArrayList<>();
-        phones.add(phone);
-        ArrayList<Location> locations = new ArrayList<>();
-        location = new Location(22.2,22.3, LocationType.WORK);
-        locations.add(new Location(22.2,22.2,LocationType.HOME));
-        locations.add(location);
-        personLab.addContact(new Person("Nevzat", "Ekmekçi", phones,"Ekmekçi", locations));
-        personLab.addContact(new Person("234", "Nevzat", phones,"Ekmekçi",locations));
-        personLab.addContact(new Person("345", "Nevzat", phones,"Ekmekçi",locations));
-        personLab.addContact(new Person("456", "Nevzat", phones,"Ekmekçi",locations));
-        personLab.addContact(new Person("567", "Nevzat", phones,"Ekmekçi",locations));
+        personLab.deleteAllContacts();
+        phones = new ArrayList<>();
+        phones.add(new Phone("12344", PhoneType.HOME));
+        locations = new ArrayList<>();
+        locations.add(new Location(22.2,22.3, LocationType.WORK));
+        statistic = new ActivityStatistic();
+
+        personLab.addContact(new Person("Nevzat", "Ekmekçi", phones, "n@com", locations,statistic));
+        personLab.addContact(new Person("Mehmet", "Ekmekçi", phones, "a@com", locations,statistic));
+        personLab.addContact(new Person("Vildan", "Ekmekçi", phones, "b@com", locations,statistic));
+        personLab.addContact(new Person("Merve", "Ekmekçi", phones, "c@com", locations,statistic));
+        personLab.addContact(new Person("Ahmet", "Ekmekçi", phones, "d@com", locations,statistic));
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
@@ -79,51 +82,12 @@ public class MainActivity extends AppCompatActivity {
                 String[] whereArgs = new String[] {
                         person.getPid()
                 };
-                PersonLab.ContactCursorWrapper ccw=  personLab.queryPersons(whereClause, whereArgs);
+                ccw =  personLab.queryPersons(whereClause, whereArgs);
                 ccw.moveToFirst();
-
-/*
-                try{
-                    ccw.moveToFirst();
-                    while (!ccw.isAfterLast()){
-                        phone.set(personLab.getPhone(ccw));
-                        ccw2.moveToNext();
-                    }
-                }
-                finally {
-                    ccw2.close();
-                }
-
-                ccw2 = queryLocations(null, null);
-                try{
-                    ccw2.moveToFirst();
-                    while (!ccw2.isAfterLast()){
-                        locations.add(getLocation(ccw2));
-                        ccw2.moveToNext();
-                    }
-                }
-                finally {
-                    ccw2.close();
-                }
-
-                ccw2 = queryStatistics(null, null);
-                try{
-                    ccw2.moveToFirst();
-                    statistic = getStatistic(ccw2);
-                }
-                finally {
-                    ccw2.close();
-                }
-
-                */
-
-
-                Person person1 = personLab.getPerson(ccw) ;
-                person1.setStatistic(personLab.getStatistic(personLab.queryStatistics(whereClause, whereArgs)));
-
+                person1 = personLab.getContact(ccw) ;
 
                 // Get the state's capital from this row in the database.
-                String name = person.getName();
+                String name = person1.getPhone().get(0).getPhoneNumber();
                 Toast.makeText(getApplicationContext(),
                         name, Toast.LENGTH_SHORT).show();
 

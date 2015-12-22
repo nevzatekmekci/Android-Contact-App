@@ -21,10 +21,12 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ PersonTable.TABLE_NAME+"("
-                        +PersonTable.Cols.PID+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        +PersonTable.Cols.PID+ " INTEGER AUTOINCREMENT NOT NULL,"
                         +PersonTable.Cols.NAME+" TEXT NOT NULL,"
                         +PersonTable.Cols.SURNAME+ " TEXT NOT NULL,"
-                        +PersonTable.Cols.EMAIL+" TEXT"+")"
+                        +PersonTable.Cols.EMAIL+" TEXT"
+                        +"PRIMARY KEY(NAME, SURNAME), "
+                        +"CONSTRAINT ID UNIQUE (NAME,SURNAME))"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ LocationTable.TABLE_NAME+"("

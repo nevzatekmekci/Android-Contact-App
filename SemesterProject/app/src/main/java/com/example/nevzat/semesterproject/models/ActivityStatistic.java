@@ -12,6 +12,13 @@ public class ActivityStatistic {
     private int outgoingCallsDuration;
 
     public ActivityStatistic() {
+        this.missingCalls = 0;
+        this.sentMessages = 0;
+        this.receivedMessages = 0;
+        this.incomingCallsNumber = 0;
+        this.outgoingCallsNumber = 0;
+        this.incomingCallsDuration = 0;
+        this.outgoingCallsDuration = 0;
     }
 
     public ActivityStatistic(int missingCalls, int sentMessages, int receivedMessages, int incomingCallsNumber,
