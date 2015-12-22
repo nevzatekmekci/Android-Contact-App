@@ -14,18 +14,14 @@ import com.example.nevzat.semesterproject.models.PhoneType;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.CursorWrapper;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,23 +72,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> listView, View view,
                                     int position, long id) {
-                // Get the cursor, positioned to the corresponding row in the result set
-                person = (Person) listView.getItemAtPosition(position);
-                String whereClause = "pid = ?";
-                String[] whereArgs = new String[] {
-                        person.getPid()
-                };
-                ccw =  personLab.queryPersons(whereClause, whereArgs);
-                ccw.moveToFirst();
-                person1 = personLab.getContact(ccw) ;
-
-                // Get the state's capital from this row in the database.
-                String name = person1.getPhone().get(0).getPhoneNumber();
-                Toast.makeText(getApplicationContext(),
-                        name, Toast.LENGTH_SHORT).show();
+                listViewElementSelection(listView, view,position,id);
 
             }
         });
+
+    }
+    public void listViewElementSelection(AdapterView<?> listView, View view,
+                                         int position, long id){
+        // Get the cursor, positioned to the corresponding row in the result set
+        person = (Person) listView.getItemAtPosition(position);
+        Intent intent = new Intent(this,ContactActivity.class);
+        intent.putExtra("pid", person.getPid());
+        startActivity(intent);
 
     }
 
