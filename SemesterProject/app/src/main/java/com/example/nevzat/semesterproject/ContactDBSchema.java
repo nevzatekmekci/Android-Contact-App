@@ -13,6 +13,7 @@ public class ContactDBSchema {
         }
 
     }
+    //deneme
     public static final class ActivityStatisticTable{
         public static final String TABLE_NAME = "activities";
         public static final class Cols{
