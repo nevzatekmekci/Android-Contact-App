@@ -19,7 +19,10 @@
             android:ems="10"
             android:id="@+id/editTextName"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -28,7 +31,10 @@
             android:ems="10"
             android:id="@+id/editTextSurname"
             android:layout_below="@+id/editTextName"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -37,7 +43,10 @@
             android:ems="10"
             android:id="@+id/editTextEmail"
             android:layout_below="@+id/editTextSurname"
-            android:layout_alignEnd="@+id/editTextSurname" />
+            android:layout_alignEnd="@+id/editTextSurname"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -46,7 +55,10 @@
             android:ems="10"
             android:id="@+id/editTextMobilePhone"
             android:layout_below="@+id/editTextEmail"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -55,7 +67,10 @@
             android:ems="10"
             android:id="@+id/editTextHomePhone"
             android:layout_below="@+id/editTextMobilePhone"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,14 +78,20 @@
             android:ems="10"
             android:id="@+id/editTextWorkPhone"
             android:layout_below="@+id/editTextHomePhone"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPostalAddress"
             android:ems="10"
             android:id="@+id/editTextHomeAddress"
-            android:layout_below="@+id/editTextWorkPhone" />
+            android:layout_below="@+id/editTextWorkPhone"
+            android:editable="true"
+            android:clickable="false"
+            android:focusable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -79,7 +100,26 @@
             android:ems="10"
             android:id="@+id/editTextWorkAddress"
             android:layout_below="@+id/editTextHomeAddress"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:editable="true"
+            android:focusable="false"
+            android:clickable="false" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:id="@+id/editButton"
+            android:layout_below="@+id/editTextWorkAddress"
+            android:layout_alignEnd="@+id/editTextWorkAddress" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/deleteButton"
+            android:layout_alignTop="@+id/editButton"
+            android:layout_toEndOf="@+id/editButton" />
     </RelativeLayout>
 
 </RelativeLayout>

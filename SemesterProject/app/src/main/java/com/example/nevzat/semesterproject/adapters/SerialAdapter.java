@@ -41,14 +41,12 @@ public class SerialAdapter extends BaseAdapter {
         view = layoutInflater.inflate(R.layout.list_view,null);
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView surname = (TextView) view.findViewById(R.id.surname);
-        TextView email = (TextView) view.findViewById(R.id.email);
-        TextView id = (TextView) view.findViewById(R.id.id);
+        TextView phone = (TextView) view.findViewById(R.id.phone);
 
         Person person = personList.get(position);
         name.setText(person.getName());
         surname.setText(person.getSurname());
-        email.setText(person.geteMail());
-        id.setText(person.getPid());
+        phone.setText(person.getPhone().get(0).getPhoneNumber());
 
         return view;
     }

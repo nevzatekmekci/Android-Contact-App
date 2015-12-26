@@ -130,6 +130,18 @@ public class PersonLab {
         database.delete(ContactDBSchema.PersonTable.TABLE_NAME, ContactDBSchema.PersonTable.Cols.PID + " = ?",
                 new String[]{String.valueOf(id)});
     }
+    public void deleteStatistic(String id){
+        database.delete(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, ContactDBSchema.ActivityStatisticTable.Cols.PID + " = ?",
+                new String[]{String.valueOf(id)});
+    }
+    public void deletePhone(String id){
+        database.delete(ContactDBSchema.PhoneTable.TABLE_NAME, ContactDBSchema.PhoneTable.Cols.PID + " = ?",
+                new String[]{String.valueOf(id)});
+    }
+    public void deleteLocation(String id){
+        database.delete(ContactDBSchema.LocationTable.TABLE_NAME, ContactDBSchema.LocationTable.Cols.PID + " = ?",
+                new String[]{String.valueOf(id)});
+    }
     public boolean deleteAllContacts() {
 
         int doneDelete = 0;
