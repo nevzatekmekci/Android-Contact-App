@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,39 +38,41 @@ public class MainActivity extends AppCompatActivity {
     public PersonLab personLab;
     public SerialAdapter dataAdapter;
     Person person;
-    Button callButton,smsButton;
+    ListView listView;
     ArrayList<Location> locations;
     ArrayList<Phone> phones;
     ActivityStatistic statistic;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         dbHelper = new ProjectDbHelper(this);
         personLab = new PersonLab(getApplicationContext());
 
         //Clean all data
-        personLab.deleteAllContacts();
+        //personLab.deleteAllContacts();
         phones = new ArrayList<>();
-        phones.add(new Phone("12344", PhoneType.HOME));
+        //phones.add(new Phone("12344", PhoneType.HOME));
+        phones.add(new Phone("05545824594", PhoneType.HOME));
         locations = new ArrayList<>();
         locations.add(new Location(22.2, 22.3, LocationType.WORK));
         statistic = new ActivityStatistic();
 
+/*
         personLab.addContact(new Person("Nevzat", "Ekmekçi", phones, "n@com", locations, statistic));
         personLab.addContact(new Person("Mehmet", "Ekmekçi", phones, "a@com", locations, statistic));
         personLab.addContact(new Person("Vildan", "Ekmekçi", phones, "b@com", locations, statistic));
         personLab.addContact(new Person("Merve", "Ekmekçi", phones, "c@com", locations, statistic));
         personLab.addContact(new Person("Ahmet", "Ekmekçi", phones, "d@com", locations, statistic));
-
-        ListView listView = (ListView) findViewById(R.id.listView);
+*/
+        //personLab.addContact(new Person("Deneme2", "Deneme2", phones, "a@com", locations, statistic));
+        listView = (ListView) findViewById(R.id.listView);
 
         List<Person> personList = personLab.getContacts();
         dataAdapter = new SerialAdapter(MainActivity.this, personList);
         listView.setAdapter(dataAdapter);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -81,54 +84,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void callButtonClick(View v) {
-        View parentRow = (View) v.getParent();
-        ListView listView = (ListView) parentRow.getParent();
-        int position = listView.getPositionForView(parentRow);
-        person = (Person) listView.getItemAtPosition(position);
-        String uri = "tel:" + person.getPhone().get(0).getPhoneNumber().trim();
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(uri));
-        startActivity(intent);
-    }
-    public void smsButtonClick(View v) {
-        View parentRow = (View) v.getParent();
-        ListView listView = (ListView) parentRow.getParent();
-        int position = listView.getPositionForView(parentRow);
-        person = (Person) listView.getItemAtPosition(position);
-        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-        smsIntent.setType("vnd.android-dir/mms-sms");
-        smsIntent.putExtra("address", "12125551212");
-        smsIntent.putExtra("sms_body", "Body of Message");
-        startActivity(smsIntent);
-    }
-
     public void listViewElementSelection(AdapterView<?> listView, View view,
                                          int position, long id){
         // Get the cursor, positioned to the corresponding row in the result set
         person = (Person) listView.getItemAtPosition(position);
-        Intent intent = new Intent(this,ContactActivity.class);
+        Intent intent = new Intent(this, ContactActivity.class);
         intent.putExtra("pid", person.getPid());
         startActivity(intent);
-
-
-
-
-        callButton = (Button) findViewById(R.id.callPhoneButton);
-        smsButton = (Button) findViewById(R.id.smsButton);
-        callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callButtonClick(v);
-            }
-        });
-        smsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                smsButtonClick(v);
-            }
-        });
-
     }
 
     @Override

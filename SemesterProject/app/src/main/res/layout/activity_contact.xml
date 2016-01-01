@@ -1,125 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.nevzat.semesterproject.activities.ContactActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".activities.ContactActivity">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editTextName"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editTextSurname"
-            android:layout_below="@+id/editTextName"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/editTextEmail"
-            android:layout_below="@+id/editTextSurname"
-            android:layout_alignEnd="@+id/editTextSurname"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
+    </android.support.design.widget.AppBarLayout>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/editTextMobilePhone"
-            android:layout_below="@+id/editTextEmail"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
+    <include layout="@layout/content_contact" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/editTextHomePhone"
-            android:layout_below="@+id/editTextMobilePhone"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/editTextWorkPhone"
-            android:layout_below="@+id/editTextHomePhone"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
-            android:ems="10"
-            android:id="@+id/editTextHomeAddress"
-            android:layout_below="@+id/editTextWorkPhone"
-            android:editable="true"
-            android:clickable="false"
-            android:focusable="false" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
-            android:ems="10"
-            android:id="@+id/editTextWorkAddress"
-            android:layout_below="@+id/editTextHomeAddress"
-            android:layout_alignParentStart="true"
-            android:editable="true"
-            android:focusable="false"
-            android:clickable="false" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:id="@+id/editButton"
-            android:layout_below="@+id/editTextWorkAddress"
-            android:layout_alignEnd="@+id/editTextWorkAddress" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:id="@+id/deleteButton"
-            android:layout_alignTop="@+id/editButton"
-            android:layout_toEndOf="@+id/editButton" />
-    </RelativeLayout>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
