@@ -101,7 +101,7 @@ public class ContactActivity extends AppCompatActivity {
         workAddress = (EditText) findViewById(R.id.editTextWorkAddress);
         editButton = (Button) findViewById(R.id.editButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
-        
+
         editTextArrayList.add(name);
         editTextArrayList.add(surname);
         editTextArrayList.add(email);

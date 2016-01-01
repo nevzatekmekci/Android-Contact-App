@@ -31,11 +31,19 @@
         android:layout_below="@+id/name"
         android:layout_alignParentStart="true" />
 
-    <ImageButton
-        android:layout_width="40"
-        android:layout_height="40"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/phoneIcon"
-        android:src="@drawable/phone"/>
+    <Button
+        android:id="@+id/callPhoneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dial"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/smsButton" />
+    <Button
+        android:id="@+id/smsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sms"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
