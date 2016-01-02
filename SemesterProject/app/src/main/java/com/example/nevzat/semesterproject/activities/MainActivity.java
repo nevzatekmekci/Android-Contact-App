@@ -22,12 +22,16 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Location> locations;
     ArrayList<Phone> phones;
     ActivityStatistic statistic;
+    EditText filteredEditText;
+    List<Person> personList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +75,58 @@ public class MainActivity extends AppCompatActivity {
 */
         //personLab.addContact(new Person("Deneme2", "Deneme2", phones, "a@com", locations, statistic));
         listView = (ListView) findViewById(R.id.listView);
-
-        List<Person> personList = personLab.getContacts();
+        filteredEditText = (EditText) findViewById(R.id.filterEditText);
+        personList = personLab.getContacts(null,null);
         dataAdapter = new SerialAdapter(MainActivity.this, personList);
         listView.setAdapter(dataAdapter);
+
+
+        filteredEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String whereClause = "name LIKE ? OR surname LIKE ?";
+                String[] whereArgs = new String[]{
+                        filteredEditText.getText().toString()+'%',
+                        filteredEditText.getText().toString()+'%'
+                };
+                personList.clear();
+                personList = personLab.getContacts(whereClause, whereArgs);
+                dataAdapter = new SerialAdapter(MainActivity.this, personList);
+                listView.setAdapter(dataAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        filteredEditText.removeTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String whereClause = "name LIKE ? OR surname LIKE ?";
+                String[] whereArgs = new String[]{
+                        filteredEditText.getText().toString()+'%',
+                        filteredEditText.getText().toString()+'%'
+                };
+                personList.clear();
+                personList = personLab.getContacts(whereClause, whereArgs);
+                dataAdapter = new SerialAdapter(MainActivity.this, personList);
+                listView.setAdapter(dataAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

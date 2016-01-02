@@ -11,13 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nevzat.semesterproject.PersonLab;
-import com.example.nevzat.semesterproject.ProjectDbHelper;
 import com.example.nevzat.semesterproject.R;
-import com.example.nevzat.semesterproject.adapters.SerialAdapter;
 import com.example.nevzat.semesterproject.models.Person;
 
 import java.util.ArrayList;
@@ -135,8 +132,8 @@ public class ContactActivity extends AppCompatActivity {
         homePhone=(EditText) findViewById(R.id.editTextHomePhone);
         mobilePhone=(EditText) findViewById(R.id.editTextMobilePhone);
         workPhone=(EditText) findViewById(R.id.editTextWorkPhone);
-        homeAddress=(EditText) findViewById(R.id.editTextHomeAddress);
-        workAddress = (EditText) findViewById(R.id.editTextWorkAddress);
+        homeAddress=(EditText) findViewById(R.id.editTextHomeAddressLat);
+        workAddress = (EditText) findViewById(R.id.editTextWorkAddressLat);
         editButton = (Button) findViewById(R.id.editButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
         callButton = (Button) findViewById(R.id.callPhoneButton);

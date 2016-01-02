@@ -295,9 +295,9 @@ public class PersonLab {
         return new ContactCursorWrapper(cursor);
     }
 
-    public List<Person> getContacts(){
-        ArrayList<Person> contacts = new ArrayList<Person>();
-        ContactCursorWrapper ccw = queryPersons(null, null);
+    public List<Person> getContacts(String whereClause,String [] whereArgs){
+        ArrayList<Person> contacts = new ArrayList<>();
+        ContactCursorWrapper ccw = queryPersons(whereClause, whereArgs);
 
         try{
             ccw.moveToFirst();
