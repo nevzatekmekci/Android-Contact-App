@@ -1,5 +1,6 @@
 package com.example.nevzat.semesterproject.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,14 +19,16 @@ import com.example.nevzat.semesterproject.models.PhoneType;
 
 import java.util.ArrayList;
 
-public class AddContact extends AppCompatActivity {
-    Button addButton;
+public class AddContactActivity extends AppCompatActivity {
+    Button addButton,homeMapButton,workMapButton;
     Person person;
     ArrayList<Phone> phone;
     ArrayList<Location> location;
+    ActivityStatistic statistics;
     PersonLab personLab;
     int gate=0;
-    EditText name, surname, email, homePhone, mobilePhone, workPhone, homeAddressLat, workAddressLng,homeAddressLng, workAddressLat;
+    double homeLat,homeLng,workLat,workLng;
+    EditText name, surname, email, homePhone, mobilePhone, workPhone, homeAddress, workAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,26 +44,55 @@ public class AddContact extends AppCompatActivity {
             }
         });
 
+        homeMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                if (homeLat!=0&&homeLng!=0){
+                    intent.putExtra("Lat",homeLat);
+                    intent.putExtra("Lng",homeLng);
+
+                }
+                startActivity(intent);
+            }
+        });
+        workMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                if (workLat!=0&&workLng!=0){
+                    intent.putExtra("Lat",workLat);
+                    intent.putExtra("Lng",workLng);
+
+                }
+                startActivity(intent);
+            }
+        });
+
     }
     public void addContact(){
         gate=requireControl();
-        person = new Person();location=new ArrayList<>();phone = new ArrayList<>();
+        person = new Person();
+        location=new ArrayList<>();
+        phone = new ArrayList<>();
+        statistics = new ActivityStatistic();
         if (gate!=1){
             person.setName(name.getText().toString());
             person.setSurname(surname.getText().toString());
             person.seteMail(email.getText().toString());
-            if (homeAddressLat.getText().toString().trim().equals("")&&homeAddressLng.getText().toString().trim().equals(""))
-                location.add(new Location(Double.parseDouble(homeAddressLat.getText().toString()), Double.parseDouble(homeAddressLat.getText().toString()), LocationType.HOME));
-            if (workAddressLat.getText().toString().trim().equals("")&&workAddressLng.getText().toString().trim().equals(""))
-                location.add(new Location(Double.parseDouble(workAddressLat.getText().toString()), Double.parseDouble(workAddressLng.getText().toString()), LocationType.WORK));
-            person.setLocation(location);
-            if (homePhone.getText().toString().trim().equals(""))
+            if (!(homeAddress.getText().toString().trim().equals("")))
+                location.add(new Location(homeLat,homeLng, LocationType.HOME));
+            if (!(workAddress.getText().toString().trim().equals("")))
+                location.add(new Location(workLat,workLng, LocationType.WORK));
+            if (!(homePhone.getText().toString().trim().equals("")))
                 phone.add(new Phone(homePhone.getText().toString(), PhoneType.HOME));
-            if (workPhone.getText().toString().trim().equals(""))
+            if (!(workPhone.getText().toString().trim().equals("")))
                 phone.add(new Phone(workPhone.getText().toString(), PhoneType.WORK));
-            if (mobilePhone.getText().toString().trim().equals(""))
+            if (!(mobilePhone.getText().toString().trim().equals("")))
                 phone.add(new Phone(mobilePhone.getText().toString(), PhoneType.MOBILE));
             person.setPhone(phone);
+            person.setLocation(location);
+            person.setStatistic(statistics);
             personLab = new PersonLab(getApplicationContext());
             personLab.addContact(person);
         }
@@ -76,12 +108,23 @@ public class AddContact extends AppCompatActivity {
             name.setError("Surname is required!");
             gate=1;
         }
-        if (homePhone.getText().toString().trim().equals("")||workPhone.getText().toString().trim().equals("")){
+        if (homePhone.getText().toString().trim().equals("")&&
+                workPhone.getText().toString().trim().equals("")&&mobilePhone.getText().toString().trim().equals("")){
             gate=1;
             if (homePhone.getText().toString().trim().equals(""))
                 homePhone.setError("Home Phone is required!");
-            else
+            else if (workPhone.getText().toString().trim().equals(""))
                 workPhone.setError("Work Phone is required!");
+            else
+                mobilePhone.setError("Mobile Phone is required!");
+        }
+        if (homeAddress.getText().toString().trim().equals("")&&
+                workAddress.getText().toString().trim().equals("")){
+            gate=1;
+            if (homeAddress.getText().toString().trim().equals(""))
+                homePhone.setError("Home Address is required!");
+            else
+                workAddress.setError("Work Address is required!");
         }
         return gate;
     }
@@ -93,11 +136,11 @@ public class AddContact extends AppCompatActivity {
         homePhone=(EditText) findViewById(R.id.editTextHomePhone);
         mobilePhone=(EditText) findViewById(R.id.editTextMobilePhone);
         workPhone=(EditText) findViewById(R.id.editTextWorkPhone);
-        homeAddressLat=(EditText) findViewById(R.id.editTextHomeAddressLat);
-        workAddressLat = (EditText) findViewById(R.id.editTextWorkAddressLat);
-        homeAddressLng=(EditText) findViewById(R.id.editTextHomeAddressLng);
-        workAddressLng = (EditText) findViewById(R.id.editTextWorkAddressLng);
-        addButton = (Button) findViewById(R.id.addButton);
+        homeAddress=(EditText) findViewById(R.id.editTextHomeAddress);
+        workAddress = (EditText) findViewById(R.id.editTextWorkAddress);
+        addButton = (Button) findViewById(R.id.deleteButton);
+        homeMapButton = (Button) findViewById(R.id.buttonHomeMap);
+        workMapButton = (Button) findViewById(R.id.buttonWorkMap);
 
 
     }

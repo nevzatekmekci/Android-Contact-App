@@ -31,13 +31,28 @@ public class PersonLab {
     public void updatePerson(Person person){
         String pid = person.getPid().toString();
         ContentValues personValues = getContentPersonValues(person);
-        ContentValues phoneValues = getContentPhoneValues(person);
-        ContentValues locationValues = getContentLocationValues(person);
-        ContentValues statisticValues = getContentStatisticValues(person);
         database.update(ContactDBSchema.PersonTable.TABLE_NAME, personValues, ContactDBSchema.PersonTable.Cols.PID + "=?", new String[]{pid});
-        database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues, ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{pid});
-        database.update(ContactDBSchema.LocationTable.TABLE_NAME, locationValues, ContactDBSchema.LocationTable.Cols.PID + "=?", new String[]{pid});
-        database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
+        addPhone(person);
+        addLocation(person);
+        //ContentValues statisticValues = getContentStatisticValues(person);
+        //database.update(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, statisticValues, ContactDBSchema.ActivityStatisticTable.Cols.PID + "=?", new String[]{pid});
+    }
+    public void updatePhone(Person person){
+        if (person.getPhone()!=null){
+            for(Phone phone : person.getPhone()){
+                ContentValues phoneValues = getContentPhoneValues(phone, person);
+                database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues, ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{person.getPid()});
+            }
+        }
+    }
+    public void updateLocation(Person person){
+
+        if (person.getLocation()!=null){
+            for (Location location : person.getLocation()){
+                ContentValues locationValues = getContentLocationValues(location, person);
+                database.update(ContactDBSchema.LocationTable.TABLE_NAME, locationValues, ContactDBSchema.LocationTable.Cols.PID + "=?", new String[]{person.getPid()});
+            }
+        }
     }
     public void addContact(Person person){
         addPerson(person);
@@ -50,12 +65,21 @@ public class PersonLab {
         database.insert(ContactDBSchema.ActivityStatisticTable.TABLE_NAME, null, statisticValues);
     }
     public void addPhone(Person person){
-        ContentValues phoneValues = getContentPhoneValues(person);
-        database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null,phoneValues);
+        if (person.getPhone()!=null){
+            for(Phone phone : person.getPhone()){
+                ContentValues phoneValues = getContentPhoneValues(phone, person);
+                database.insert(ContactDBSchema.PhoneTable.TABLE_NAME, null,phoneValues);
+            }
+        }
+
     }
     public void addLocation(Person person){
-        ContentValues locationValues = getContentLocationValues(person);
-        database.insert(ContactDBSchema.LocationTable.TABLE_NAME, null, locationValues);
+        if (person.getLocation()!=null){
+            for (Location location : person.getLocation()){
+                ContentValues locationValues = getContentLocationValues(location, person);
+                database.insert(ContactDBSchema.LocationTable.TABLE_NAME, null, locationValues);
+            }
+        }
     }
     public void addPerson(Person person){
         ContentValues personValues = getContentPersonValues(person);
@@ -98,31 +122,21 @@ public class PersonLab {
 
     }
 
-    public static ContentValues getContentPhoneValues(Person person) {
+    public static ContentValues getContentPhoneValues(Phone phone,Person person) {
         ContentValues values = new ContentValues();
-        if (person.getPhone()!=null){
-            for (int i = 0; i < person.getPhone().size(); i++) {
-                values.put(ContactDBSchema.PhoneTable.Cols.NUMBER, person.getPhone().get(i).getPhoneNumber().toString());
-                values.put(ContactDBSchema.PhoneTable.Cols.TYPE, person.getPhone().get(i).getPhoneType().toString());
-                values.put(ContactDBSchema.PhoneTable.Cols.PID, person.getPid());
-            }
-            return values;
-        }
-        return null;
+        values.put(ContactDBSchema.PhoneTable.Cols.NUMBER, phone.getPhoneNumber());
+        values.put(ContactDBSchema.PhoneTable.Cols.TYPE, phone.getPhoneType().toString());
+        values.put(ContactDBSchema.PhoneTable.Cols.PID, person.getPid());
+        return values;
     }
 
-    public static ContentValues getContentLocationValues(Person person){
+    public static ContentValues getContentLocationValues(Location location, Person person){
         ContentValues values = new ContentValues();
-        if (person.getLocation()!=null){
-            for (int i=0;i< person.getLocation().size();i++){
-                values.put(ContactDBSchema.LocationTable.Cols.TYPE, person.getLocation().get(i).getLocationType().toString());
-                values.put(ContactDBSchema.LocationTable.Cols.PID, person.getPid());
-                values.put(ContactDBSchema.LocationTable.Cols.LATITUDE, person.getLocation().get(i).getLat());
-                values.put(ContactDBSchema.LocationTable.Cols.LONGITUDE, person.getLocation().get(i).getLng());
-            }
-            return values;
-        }
-        return null;
+        values.put(ContactDBSchema.LocationTable.Cols.TYPE, location.getLocationType().toString());
+        values.put(ContactDBSchema.LocationTable.Cols.PID, person.getPid());
+        values.put(ContactDBSchema.LocationTable.Cols.LATITUDE, location.getLat());
+        values.put(ContactDBSchema.LocationTable.Cols.LONGITUDE, location.getLng());
+        return values;
 
     }
 
@@ -161,12 +175,7 @@ public class PersonLab {
         String name = cursorWrapper.getString(1);
         String surname = cursorWrapper.getString(2);
         String email = cursorWrapper.getString(3);
-        /*
-            String uuid = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.PID));
-            String name = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.NAME));
-            String surname = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.SURNAME));
-            String email = getString(getColumnIndex(ContactDBSchema.PersonTable.Cols.EMAIL));
-*/
+
         Person person = new Person();
         person.setPid(uuid);
         person.setName(name);
@@ -200,8 +209,6 @@ public class PersonLab {
             int outgoingCallsNumber = cursorWrapper.getInt(5);
             int incomingCallsDuration=cursorWrapper.getInt(6);
             int outgoingCallsDuration=cursorWrapper.getInt(7);
-
-
 
             statistic.setMissingCalls(missingCalls);
             statistic.setSentMessages(sentMessages);

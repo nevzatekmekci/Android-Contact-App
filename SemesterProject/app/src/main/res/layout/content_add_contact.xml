@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_below="@id/toolbar">
 
 
     <TextView
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/textView1"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="51dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -110,8 +110,9 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextMobilePhone"
-        android:layout_above="@+id/textView5"
-        android:layout_alignStart="@+id/editTextEmail" />
+        android:layout_alignStart="@+id/editTextEmail"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_toStartOf="@+id/buttonHomeMap" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -119,63 +120,65 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextHomePhone"
-        android:layout_above="@+id/textView6"
-        android:layout_alignStart="@+id/editTextMobilePhone" />
+        android:layout_alignStart="@+id/editTextMobilePhone"
+        android:layout_alignBottom="@+id/textView5"
+        android:layout_toStartOf="@+id/buttonHomeMap" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextWorkPhone"
-        android:layout_above="@+id/textView7"
-        android:layout_alignStart="@+id/editTextHomePhone" />
+        android:layout_alignStart="@+id/editTextHomePhone"
+        android:layout_above="@+id/buttonHomeMap"
+        android:layout_toStartOf="@+id/buttonHomeMap" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
         android:ems="10"
-        android:id="@+id/editTextHomeAddressLat"
+        android:id="@+id/editTextHomeAddress"
         android:layout_alignStart="@+id/editTextWorkPhone"
-        android:layout_alignBottom="@+id/textView7"
-        android:layout_toStartOf="@+id/editTextWorkAddressLng" />
+        android:layout_toStartOf="@+id/deleteButton"
+        android:layout_above="@+id/buttonWorkMap"
+        android:layout_alignEnd="@+id/editTextEmail" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
         android:ems="10"
-        android:id="@+id/editTextWorkAddressLat"
-        android:layout_alignStart="@+id/editTextHomeAddressLat"
-        android:layout_toStartOf="@+id/addButton"
-        android:layout_alignBottom="@+id/textView8" />
+        android:id="@+id/editTextWorkAddress"
+        android:layout_alignStart="@+id/editTextHomeAddress"
+        android:layout_toStartOf="@+id/deleteButton"
+        android:layout_above="@+id/deleteButton"
+        android:layout_alignEnd="@+id/editTextEmail" />
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:id="@+id/addButton"
+        android:id="@+id/deleteButton"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/textView8" />
 
-    <EditText
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/editTextHomeAddressLng"
-        android:layout_below="@+id/textView6"
-        android:layout_toEndOf="@+id/editTextWorkPhone"
-        android:layout_alignBottom="@+id/editTextHomeAddressLat"
-        android:layout_alignStart="@+id/editTextWorkAddressLng" />
+        android:text="Map"
+        android:id="@+id/buttonHomeMap"
+        android:layout_above="@+id/buttonWorkMap"
+        android:layout_alignEnd="@+id/deleteButton" />
 
-    <EditText
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/editTextWorkAddressLng"
-        android:layout_alignTop="@+id/editTextWorkAddressLat"
-        android:layout_alignStart="@+id/addButton" />
-
+        android:text="Map"
+        android:id="@+id/buttonWorkMap"
+        android:layout_above="@+id/deleteButton"
+        android:layout_toEndOf="@+id/editTextEmail" />
 
 </RelativeLayout>

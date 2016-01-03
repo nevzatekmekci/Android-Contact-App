@@ -12,14 +12,8 @@ import com.example.nevzat.semesterproject.models.Person;
 import com.example.nevzat.semesterproject.models.Phone;
 import com.example.nevzat.semesterproject.models.PhoneType;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -31,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public PersonLab personLab;
     public SerialAdapter dataAdapter;
     Person person;
+    Button addButton;
     ListView listView;
     ArrayList<Location> locations;
     ArrayList<Phone> phones;
@@ -60,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         //Clean all data
         //personLab.deleteAllContacts();
         phones = new ArrayList<>();
-        //phones.add(new Phone("12344", PhoneType.HOME));
-        phones.add(new Phone("05545824594", PhoneType.HOME));
+        phones.add(new Phone("12344", PhoneType.HOME));
+        phones.add(new Phone("05545824594", PhoneType.MOBILE));
         locations = new ArrayList<>();
         locations.add(new Location(22.2, 22.3, LocationType.WORK));
         statistic = new ActivityStatistic();
@@ -73,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
         personLab.addContact(new Person("Merve", "Ekmekçi", phones, "c@com", locations, statistic));
         personLab.addContact(new Person("Ahmet", "Ekmekçi", phones, "d@com", locations, statistic));
 */
-        //personLab.addContact(new Person("Deneme2", "Deneme2", phones, "a@com", locations, statistic));
+        personLab.addContact(new Person("Deneme2", "Deneme2", phones, "a@com", locations, statistic));
         listView = (ListView) findViewById(R.id.listView);
         filteredEditText = (EditText) findViewById(R.id.filterEditText);
+        addButton = (Button) findViewById(R.id.deleteButton);
         personList = personLab.getContacts(null,null);
         dataAdapter = new SerialAdapter(MainActivity.this, personList);
         listView.setAdapter(dataAdapter);
@@ -91,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String whereClause = "name LIKE ? OR surname LIKE ?";
                 String[] whereArgs = new String[]{
-                        filteredEditText.getText().toString()+'%',
-                        filteredEditText.getText().toString()+'%'
+                        filteredEditText.getText().toString() + '%',
+                        filteredEditText.getText().toString() + '%'
                 };
                 personList.clear();
                 personList = personLab.getContacts(whereClause, whereArgs);
@@ -113,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String whereClause = "name LIKE ? OR surname LIKE ?";
                 String[] whereArgs = new String[]{
-                        filteredEditText.getText().toString()+'%',
-                        filteredEditText.getText().toString()+'%'
+                        filteredEditText.getText().toString() + '%',
+                        filteredEditText.getText().toString() + '%'
                 };
                 personList.clear();
                 personList = personLab.getContacts(whereClause, whereArgs);
@@ -126,7 +121,14 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),AddContactActivity.class);
+                startActivity(intent);
 
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
