@@ -271,7 +271,7 @@ public class ContactActivity extends AppCompatActivity {
         name.setText(person.getName());
         surname.setText(person.getSurname());
         email.setText(person.geteMail());
-        
+
 
         for(Phone phone: person.getPhone()){
             if(phone.getPhoneType().equals(PhoneType.HOME))
