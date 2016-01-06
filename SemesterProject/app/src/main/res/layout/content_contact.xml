@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_margin="5dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="5dp"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,13 +11,12 @@
     tools:context=".activities.ContactActivity"
     tools:showIn="@layout/activity_contact">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/textView1"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="25dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Surname"
         android:id="@+id/textView2"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView1"
         android:layout_alignParentStart="true" />
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="E-Mail"
         android:id="@+id/textView3"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true" />
     <TextView
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Mobile Phone"
         android:id="@+id/textView4"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true" />
 
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:text="Home Phone"
         android:id="@+id/textView5"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView4"
         android:layout_alignParentStart="true" />
     <TextView
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="Work Phone"
         android:id="@+id/textView6"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView5"
         android:layout_alignParentStart="true" />
 
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:text="Home Address"
         android:id="@+id/textView7"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true" />
     <TextView
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:text="Work Address"
         android:id="@+id/textView8"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView7"
         android:layout_alignParentStart="true" />
 
@@ -87,9 +87,8 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/editTextName"
-        android:layout_marginStart="19dp"
-        android:layout_above="@+id/editTextSurname"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_above="@+id/textView2"
+        android:layout_toEndOf="@+id/textView7" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -97,9 +96,8 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/editTextSurname"
-        android:layout_alignStart="@+id/editTextName"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_below="@+id/editTextName"
+        android:layout_alignStart="@+id/editTextName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -107,9 +105,8 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/editTextEmail"
-        android:layout_alignStart="@+id/editTextSurname"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_below="@+id/editTextSurname"
+        android:layout_alignStart="@+id/editTextName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -117,9 +114,8 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextMobilePhone"
-        android:layout_alignStart="@+id/editTextEmail"
-        android:layout_toStartOf="@+id/buttonCallWork"
-        android:layout_alignBottom="@+id/buttonCallMobile" />
+        android:layout_below="@+id/editTextEmail"
+        android:layout_alignStart="@+id/editTextName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -127,44 +123,40 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextHomePhone"
-        android:layout_alignStart="@+id/editTextMobilePhone"
-        android:layout_alignBottom="@+id/textView5"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_below="@+id/editTextMobilePhone"
+        android:layout_alignStart="@+id/editTextName" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextHomePhone"
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/editTextWorkPhone"
-        android:layout_alignStart="@+id/editTextHomePhone"
-        android:layout_above="@+id/textView7"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_alignStart="@+id/editTextName"/>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
         android:ems="10"
         android:id="@+id/editTextHomeAddress"
-        android:layout_alignStart="@+id/editTextWorkPhone"
-        android:layout_alignBottom="@+id/textView7"
-        android:layout_toStartOf="@+id/buttonHomeMap" />
+        android:layout_below="@+id/editTextWorkPhone"
+        android:layout_alignStart="@+id/editTextName" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextHomeAddress"
         android:inputType="textPostalAddress"
         android:ems="10"
         android:id="@+id/editTextWorkAddress"
-        android:layout_alignStart="@+id/editTextHomeAddress"
-        android:layout_toStartOf="@+id/buttonCallWork"
-        android:layout_alignBottom="@+id/textView8" />
+        android:layout_alignStart="@+id/editTextName" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
         android:id="@+id/deleteButton"
-        android:layout_alignTop="@+id/editButton"
+        android:layout_below="@+id/buttonWorkMap"
         android:layout_alignParentEnd="true" />
 
     <Button
@@ -173,15 +165,14 @@
         android:text="Sms"
         android:id="@+id/smsButton"
         android:layout_alignTop="@+id/editButton"
-        android:layout_alignStart="@+id/editTextWorkAddress" />
+        android:layout_toStartOf="@+id/editButton" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:text="save"
         android:id="@+id/editButton"
-        android:layout_below="@+id/textView8"
-        android:layout_toEndOf="@+id/smsButton"
-        android:layout_marginTop="17dp" />
+        android:layout_alignTop="@+id/deleteButton"
+        android:layout_toStartOf="@+id/deleteButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -189,8 +180,8 @@
         android:layout_height="wrap_content"
         android:text="Call"
         android:id="@+id/buttonCallMobile"
-        android:layout_above="@+id/buttonCallHome"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignEnd="@+id/deleteButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -198,8 +189,10 @@
         android:layout_height="wrap_content"
         android:text="Call"
         android:id="@+id/buttonCallHome"
-        android:layout_alignBottom="@+id/editTextHomePhone"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/buttonCallMobile"
+        android:layout_below="@+id/buttonCallMobile"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-7dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -207,25 +200,30 @@
         android:layout_height="wrap_content"
         android:text="Call"
         android:id="@+id/buttonCallWork"
-        android:layout_alignBottom="@+id/editTextWorkPhone"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/buttonCallMobile"
+        android:layout_below="@+id/buttonCallHome"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-7dp" />
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Map"
         android:id="@+id/buttonHomeMap"
-        android:layout_above="@+id/buttonWorkMap"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/buttonCallMobile"
+        android:layout_below="@+id/buttonCallWork"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-7dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Map"
-        android:layout_alignBottom="@+id/editTextWorkAddress"
         android:id="@+id/buttonWorkMap"
-        android:layout_below="@+id/editTextHomeAddress"
-        android:layout_toEndOf="@+id/editTextHomeAddress" />
+        android:layout_alignStart="@+id/buttonCallMobile"
+        android:layout_below="@+id/buttonHomeMap"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-7dp" />
 
 </RelativeLayout>

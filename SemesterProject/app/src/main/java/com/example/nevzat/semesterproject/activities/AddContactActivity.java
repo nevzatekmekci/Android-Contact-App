@@ -1,5 +1,6 @@
 package com.example.nevzat.semesterproject.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.nevzat.semesterproject.PersonLab;
 import com.example.nevzat.semesterproject.R;
@@ -35,7 +37,7 @@ public class AddContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_contact);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        homeLat=41.0;homeLng=28.56;workLat=41.0;workLng=28.56;
         controllerInit();
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,28 +46,23 @@ public class AddContactActivity extends AppCompatActivity {
             }
         });
 
+
         homeMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                if (homeLat!=0&&homeLng!=0){
-                    intent.putExtra("Lat",homeLat);
-                    intent.putExtra("Lng",homeLng);
-
-                }
-                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("Latitude",homeLat);
+                intent.putExtra("Longitude",homeLng);
+                startActivityForResult(intent, 1);
             }
         });
         workMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                if (workLat!=0&&workLng!=0){
-                    intent.putExtra("Lat",workLat);
-                    intent.putExtra("Lng",workLng);
-
-                }
-                startActivity(intent);
+                intent.putExtra("Latitude",workLat);
+                intent.putExtra("Longitude",workLng);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -95,6 +92,9 @@ public class AddContactActivity extends AppCompatActivity {
             person.setStatistic(statistics);
             personLab = new PersonLab(getApplicationContext());
             personLab.addContact(person);
+            Toast.makeText(getApplicationContext(), "Contact Added", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -105,28 +105,50 @@ public class AddContactActivity extends AppCompatActivity {
             gate=1;
         }
         if (surname.getText().toString().trim().equals("")){
-            name.setError("Surname is required!");
+            surname.setError("Surname is required!");
             gate=1;
         }
         if (homePhone.getText().toString().trim().equals("")&&
                 workPhone.getText().toString().trim().equals("")&&mobilePhone.getText().toString().trim().equals("")){
             gate=1;
-            if (homePhone.getText().toString().trim().equals(""))
-                homePhone.setError("Home Phone is required!");
-            else if (workPhone.getText().toString().trim().equals(""))
-                workPhone.setError("Work Phone is required!");
+            if (mobilePhone.getText().toString().trim().equals(""))
+                mobilePhone.setError("Home Phone is required!");
+            else if (homePhone.getText().toString().trim().equals(""))
+                homePhone.setError("Work Phone is required!");
             else
-                mobilePhone.setError("Mobile Phone is required!");
+                workPhone.setError("Mobile Phone is required!");
         }
         if (homeAddress.getText().toString().trim().equals("")&&
                 workAddress.getText().toString().trim().equals("")){
             gate=1;
             if (homeAddress.getText().toString().trim().equals(""))
-                homePhone.setError("Home Address is required!");
+                homeAddress.setError("Home Address is required!");
             else
                 workAddress.setError("Work Address is required!");
         }
         return gate;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) { //x is the requestCode you chose above
+            if(resultCode == Activity.RESULT_OK){
+                homeLat = Double.parseDouble(data.getStringExtra("latitude"));
+                homeLng = Double.parseDouble(data.getStringExtra("longitude"));
+                homeAddress.setText(homeLat+" "+homeLng);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                //ActivityB was closed before you put any results
+            }
+        }
+        else if (requestCode==2){
+            if(resultCode == Activity.RESULT_OK){
+                workLat = Double.parseDouble(data.getStringExtra("latitude"));
+                workLng = Double.parseDouble(data.getStringExtra("longitude"));
+                workAddress.setText(workLat+" "+workLng);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                //ActivityB was closed before you put any results
+            }
+        }
     }
 
     public void controllerInit(){

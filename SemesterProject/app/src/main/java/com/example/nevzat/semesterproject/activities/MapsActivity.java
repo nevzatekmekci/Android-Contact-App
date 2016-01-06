@@ -1,5 +1,6 @@
 package com.example.nevzat.semesterproject.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -35,6 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (googleMap==null){
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapfragment)).getMap();
             if (googleMap!=null){
+                googleMap.clear();
                 Bundle bundle = getIntent().getExtras();
                 LatLng location = new LatLng(bundle.getDouble("Latitude"),bundle.getDouble("Longitude"));
                 googleMap.addMarker(new MarkerOptions().position(location).title("Marker in Location"));
@@ -47,8 +49,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapLongClick(LatLng latLng) {
                 Log.d("DEBUG", "Map clicked [" + latLng.latitude + " / " + latLng.longitude + "]");
+                googleMap.clear();
                 googleMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
-                Toast.makeText(getApplicationContext(),"Location added",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"New Location.",Toast.LENGTH_LONG).show();
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
                 ReturnMapData(latLng);
             }
@@ -59,10 +62,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void ReturnMapData(LatLng arg) {
-        Intent intent = this.getIntent();
-        intent.putExtra("latitude", String.valueOf(arg.latitude));
-        intent.putExtra("longitude", String.valueOf(arg.longitude));
-        this.setResult(RESULT_OK, intent);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("latitude", String.valueOf(arg.latitude));
+        resultIntent.putExtra("longitude", String.valueOf(arg.longitude));
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+
     }
     /**
      * Manipulates the map once available.
@@ -77,7 +82,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         Bundle bundle = getIntent().getExtras();
-        // Add a marker in Sydney and move the camera
         LatLng location = new LatLng(bundle.getDouble("Latitude"),bundle.getDouble("Longitude"));
         googleMap.addMarker(new MarkerOptions().position(location).title("Marker in Location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));

@@ -1,6 +1,7 @@
 package com.example.nevzat.semesterproject.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,7 +31,7 @@ public class ContactActivity extends AppCompatActivity {
     Person person;
     ArrayList<Phone> phone;
     ArrayList<Location> location;
-    int count = 0;
+    int gate;
     String pid;
     double homeLat,homeLng,workLat,workLng;
     EditText name, surname, email, homePhone, mobilePhone, workPhone, homeAddress, workAddress;
@@ -43,6 +44,7 @@ public class ContactActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
+        homeLat=41.0;homeLng=28.56;workLat=41.0;workLng=28.56;
         pid = intent.getStringExtra("pid");
         personLab = new PersonLab(getApplicationContext());
         String whereClause = "pid = ?";
@@ -57,10 +59,8 @@ public class ContactActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
-                if (count % 2 == 1)
-                    editContact(pid);
-                else
+                int value = requireControl();
+                if (value==0)
                     saveContact(pid);
             }
         });
@@ -68,10 +68,6 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                if (homeLat==0&&homeLng==0){
-                    homeLat=41.0;
-                    homeLng=28.56;
-                }
                 intent.putExtra("Latitude",homeLat);
                 intent.putExtra("Longitude",homeLng);
                 startActivityForResult(intent, 1);
@@ -81,10 +77,6 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                if (workLat==0&&workLng==0){
-                    workLat=41.0;
-                    workLng=28.56;
-                }
                 intent.putExtra("Latitude",workLat);
                 intent.putExtra("Longitude",workLng);
                 startActivityForResult(intent, 2);
@@ -100,7 +92,7 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!workPhone.getText().toString().trim().equals(""))
-                    callButtonClick(workPhone.getText().toString());
+                    callButtonClick(workPhone.getText().toString(),pid);
                 else
                     Toast.makeText(getApplicationContext(),"Work Number not found",Toast.LENGTH_LONG).show();
             }
@@ -109,7 +101,7 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mobilePhone.getText().toString().trim().equals(""))
-                    callButtonClick(mobilePhone.getText().toString());
+                    callButtonClick(mobilePhone.getText().toString(),pid);
                 else
                     Toast.makeText(getApplicationContext(),"Mobile Number not found",Toast.LENGTH_LONG).show();
             }
@@ -118,7 +110,7 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!homePhone.getText().toString().trim().equals(""))
-                    callButtonClick(homePhone.getText().toString());
+                    callButtonClick(homePhone.getText().toString(),pid);
                 else
                     Toast.makeText(getApplicationContext(),"Home Number not found",Toast.LENGTH_LONG).show();
             }
@@ -133,7 +125,7 @@ public class ContactActivity extends AppCompatActivity {
 
     }
 
-    public void callButtonClick(String phone) {
+    public void callButtonClick(String phone,String pid) {
         String uri = "tel:" + phone;
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse(uri));
@@ -154,19 +146,9 @@ public class ContactActivity extends AppCompatActivity {
     }
 
 
-    public void editContact(String pid){
-        editButton.setText("Save");
-        for (EditText editText:editTextArrayList){
-            editText.setClickable(true);
-            editText.setFocusable(true);
-        }
-    }
     public void saveContact(String pid){
-        editButton.setText("Edit");
-        for (EditText editText:editTextArrayList){
-            editText.setClickable(false);
-            editText.setFocusable(false);
-        }
+
+        Toast.makeText(getApplicationContext(),"Contact saved",Toast.LENGTH_LONG).show();
         personLab.deleteLocation(pid);
         personLab.deletePhone(pid);
         location = new ArrayList<>();
@@ -188,29 +170,71 @@ public class ContactActivity extends AppCompatActivity {
         person.setLocation(location);
         personLab = new PersonLab(getApplicationContext());
         personLab.updatePerson(person);
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) { //x is the requestCode you chose above
-            if(resultCode == RESULT_OK){
+            if(resultCode == Activity.RESULT_OK){
                 homeLat = Double.parseDouble(data.getStringExtra("latitude"));
                 homeLng = Double.parseDouble(data.getStringExtra("longitude"));
-            } else if (resultCode == RESULT_CANCELED) {
+                homeAddress.setText(homeLat+" "+homeLng);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 //ActivityB was closed before you put any results
             }
         }
         else if (requestCode==2){
-            if(resultCode == RESULT_OK){
+            if(resultCode == Activity.RESULT_OK){
                 workLat = Double.parseDouble(data.getStringExtra("latitude"));
                 workLng = Double.parseDouble(data.getStringExtra("longitude"));
-            } else if (resultCode == RESULT_CANCELED) {
+                workAddress.setText(workLat+" "+workLng);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 //ActivityB was closed before you put any results
             }
         }
     }
+
+    public int requireControl(){
+        gate=0;
+        if (name.getText().toString().trim().equals("")){
+            name.setError("Name is required!");
+            gate=1;
+        }
+        if (surname.getText().toString().trim().equals("")){
+            surname.setError("Surname is required!");
+            gate=1;
+        }
+        if (homePhone.getText().toString().trim().equals("")&&
+                workPhone.getText().toString().trim().equals("")&&mobilePhone.getText().toString().trim().equals("")){
+            gate=1;
+            if (mobilePhone.getText().toString().trim().equals(""))
+                mobilePhone.setError("Home Phone is required!");
+            else if (homePhone.getText().toString().trim().equals(""))
+                homePhone.setError("Work Phone is required!");
+            else
+                workPhone.setError("Mobile Phone is required!");
+        }
+        if (homeAddress.getText().toString().trim().equals("")&&
+                workAddress.getText().toString().trim().equals("")){
+            gate=1;
+            if (homeAddress.getText().toString().trim().equals(""))
+                homeAddress.setError("Home Address is required!");
+            else
+                workAddress.setError("Work Address is required!");
+        }
+        return gate;
+    }
+
+
     public void deleteContact(String pid){
         personLab.deletePerson(pid);
-        Toast.makeText(getApplicationContext(),person.getName()+" "
-                +person.getSurname()+" silindi",Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(), person.getName() + " "
+                + person.getSurname() + " Deleted", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+
     }
 
     public void controllerInit(){
@@ -258,10 +282,16 @@ public class ContactActivity extends AppCompatActivity {
         }
 
         for(Location location:person.getLocation()){
-            if(location.getLocationType().equals(LocationType.HOME))
-                homeAddress.setText(location.getLat()+""+ location.getLng());
-            else
-                workAddress.setText(location.getLat()+""+ location.getLng());
+            if(location.getLocationType().equals(LocationType.HOME)){
+                homeLat=location.getLat();
+                homeLng=location.getLng();
+                homeAddress.setText(homeLat+" "+ homeLng);
+            }
+            else{
+                workLat=location.getLat();
+                workLng=location.getLng();
+                homeAddress.setText(workLat+" "+ workLng);
+            }
         }
     }
 }
