@@ -52,25 +52,24 @@ public class MainActivity extends AppCompatActivity {
         personLab = new PersonLab(getApplicationContext());
 
         //Clean all data
-        //personLab.deleteAllContacts();
+        /*
+        personLab.deleteAllContacts();
         phones = new ArrayList<>();
-        phones.add(new Phone("12344", PhoneType.HOME));
         phones.add(new Phone("05545824594", PhoneType.MOBILE));
         locations = new ArrayList<>();
         locations.add(new Location(22.2, 22.3, LocationType.WORK));
         statistic = new ActivityStatistic();
 
-/*
+
         personLab.addContact(new Person("Nevzat", "Ekmekçi", phones, "n@com", locations, statistic));
         personLab.addContact(new Person("Mehmet", "Ekmekçi", phones, "a@com", locations, statistic));
         personLab.addContact(new Person("Vildan", "Ekmekçi", phones, "b@com", locations, statistic));
         personLab.addContact(new Person("Merve", "Ekmekçi", phones, "c@com", locations, statistic));
         personLab.addContact(new Person("Ahmet", "Ekmekçi", phones, "d@com", locations, statistic));
 */
-        personLab.addContact(new Person("Deneme2", "Deneme2", phones, "a@com", locations, statistic));
         listView = (ListView) findViewById(R.id.listView);
         filteredEditText = (EditText) findViewById(R.id.filterEditText);
-        addButton = (Button) findViewById(R.id.deleteButton);
+        addButton = (Button) findViewById(R.id.addButton);
         personList = personLab.getContacts(null,null);
         dataAdapter = new SerialAdapter(MainActivity.this, personList);
         listView.setAdapter(dataAdapter);

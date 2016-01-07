@@ -172,7 +172,7 @@ public class ContactActivity extends AppCompatActivity {
         personLab.updatePerson(person);
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
-        
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapfragment);
         mapFragment.getMapAsync(this);
+        Toast.makeText(getApplicationContext(),"Seçim yapmak için uzun basınız", Toast.LENGTH_LONG).show();
 
         if (googleMap==null){
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapfragment)).getMap();
