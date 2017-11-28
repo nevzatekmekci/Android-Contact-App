@@ -1,16 +1,14 @@
-package com.example.nevzat.semesterproject.activities;
+package com.example.nevzat.project.activities;
 
 
-import com.example.nevzat.semesterproject.PersonLab;
-import com.example.nevzat.semesterproject.ProjectDbHelper;
+import com.example.nevzat.project.PersonLab;
+import com.example.nevzat.project.ProjectDbHelper;
+import com.example.nevzat.project.adapters.SerialAdapter;
+import com.example.nevzat.project.models.ActivityStatistic;
+import com.example.nevzat.project.models.Location;
+import com.example.nevzat.project.models.Person;
+import com.example.nevzat.project.models.Phone;
 import com.example.nevzat.semesterproject.R;
-import com.example.nevzat.semesterproject.adapters.SerialAdapter;
-import com.example.nevzat.semesterproject.models.ActivityStatistic;
-import com.example.nevzat.semesterproject.models.Location;
-import com.example.nevzat.semesterproject.models.LocationType;
-import com.example.nevzat.semesterproject.models.Person;
-import com.example.nevzat.semesterproject.models.Phone;
-import com.example.nevzat.semesterproject.models.PhoneType;
 
 import android.content.Intent;
 import android.os.Bundle;

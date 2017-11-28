@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject;
+package com.example.nevzat.project;
 
 
 

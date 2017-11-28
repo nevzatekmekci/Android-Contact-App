@@ -1,6 +1,8 @@
-package com.example.nevzat.semesterproject.fragments;
+package com.example.nevzat.project.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -36,5 +38,9 @@ public class MapFragment extends FragmentActivity {
         }*/
         return v;
     }
+
+
+
+
 
 }

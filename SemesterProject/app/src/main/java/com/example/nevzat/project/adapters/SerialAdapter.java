@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject.adapters;
+package com.example.nevzat.project.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.nevzat.project.models.Person;
 import com.example.nevzat.semesterproject.R;
-import com.example.nevzat.semesterproject.models.Person;
+
 import java.util.List;
 
 public class SerialAdapter extends BaseAdapter {

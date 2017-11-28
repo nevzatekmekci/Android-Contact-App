@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject;
+package com.example.nevzat.project;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,12 +6,12 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.nevzat.semesterproject.models.ActivityStatistic;
-import com.example.nevzat.semesterproject.models.Location;
-import com.example.nevzat.semesterproject.models.LocationType;
-import com.example.nevzat.semesterproject.models.Person;
-import com.example.nevzat.semesterproject.models.Phone;
-import com.example.nevzat.semesterproject.models.PhoneType;
+import com.example.nevzat.project.models.ActivityStatistic;
+import com.example.nevzat.project.models.Location;
+import com.example.nevzat.project.models.LocationType;
+import com.example.nevzat.project.models.Person;
+import com.example.nevzat.project.models.Phone;
+import com.example.nevzat.project.models.PhoneType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,8 @@ public class PersonLab {
         if (person.getPhone()!=null){
             for(Phone phone : person.getPhone()){
                 ContentValues phoneValues = getContentPhoneValues(phone, person);
-                database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues, ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{person.getPid()});
+                database.update(ContactDBSchema.PhoneTable.TABLE_NAME, phoneValues,
+                        ContactDBSchema.PhoneTable.Cols.PID + "=?", new String[]{person.getPid()});
             }
         }
     }

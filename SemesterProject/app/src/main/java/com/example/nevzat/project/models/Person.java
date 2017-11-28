@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject.models;
+package com.example.nevzat.project.models;
 
 
 import java.util.ArrayList;

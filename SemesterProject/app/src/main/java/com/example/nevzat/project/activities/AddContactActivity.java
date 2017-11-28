@@ -1,4 +1,4 @@
-package com.example.nevzat.semesterproject.activities;
+package com.example.nevzat.project.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,14 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.nevzat.semesterproject.PersonLab;
+import com.example.nevzat.project.PersonLab;
 import com.example.nevzat.semesterproject.R;
-import com.example.nevzat.semesterproject.models.ActivityStatistic;
-import com.example.nevzat.semesterproject.models.Location;
-import com.example.nevzat.semesterproject.models.LocationType;
-import com.example.nevzat.semesterproject.models.Person;
-import com.example.nevzat.semesterproject.models.Phone;
-import com.example.nevzat.semesterproject.models.PhoneType;
+import com.example.nevzat.project.models.ActivityStatistic;
+import com.example.nevzat.project.models.Location;
+import com.example.nevzat.project.models.LocationType;
+import com.example.nevzat.project.models.Person;
+import com.example.nevzat.project.models.Phone;
+import com.example.nevzat.project.models.PhoneType;
 
 import java.util.ArrayList;
 
